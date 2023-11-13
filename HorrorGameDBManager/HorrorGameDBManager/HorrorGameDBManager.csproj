@@ -48,13 +48,13 @@
     <Compile Include="Models\AcquiredAbility.cs" />
     <Compile Include="Models\ActivatedAbility.cs" />
     <Compile Include="Models\Artifact.cs" />
-    <Compile Include="Models\ArtifactRarity.cs" />
     <Compile Include="Models\CollectedArtifact.cs" />
     <Compile Include="Models\Entity.cs" />
+    <Compile Include="Models\GameMode.cs" />
     <Compile Include="Models\GameSession.cs" />
-    <Compile Include="Models\GameType.cs" />
     <Compile Include="Models\Player.cs" />
     <Compile Include="Models\PlayerSession.cs" />
+    <Compile Include="Models\RarityLevel.cs" />
     <Compile Include="Models\Server.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

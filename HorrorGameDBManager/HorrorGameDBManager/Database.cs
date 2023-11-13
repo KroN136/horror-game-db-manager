@@ -2,25 +2,36 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace HorrorGameDBManager
 {
-    internal class Database
+    internal static class Database
     {
         public static List<Ability> Abilities { get; private set; } = new List<Ability>();
         public static List<AcquiredAbility> AcquiredAbilities { get; private set; } = new List<AcquiredAbility>();
         public static List<Artifact> Artifacts { get; private set; } = new List<Artifact>();
-        public static List<ArtifactRarity> ArtifactRarities { get; private set; } = new List<ArtifactRarity>();
         public static List<CollectedArtifact> CollectedArtifacts { get; private set; } = new List<CollectedArtifact>();
         public static List<Entity> Entities { get; private set; } = new List<Entity>();
+        public static List<GameMode> GameModes { get; private set; } = new List<GameMode>();
         public static List<GameSession> GameSessions { get; private set; } = new List<GameSession>();
-        public static List<GameType> GameTypes { get; private set; } = new List<GameType>();
         public static List<Player> Players { get; private set; } = new List<Player>();
         public static List<PlayerSession> PlayerSessions { get; private set; } = new List<PlayerSession>();
+        public static List<RarityLevel> RarityLevels { get; private set; } = new List<RarityLevel>();
         public static List<Server> Servers { get; private set; } = new List<Server>();
+
+        #region Getters
+
+        public static Player GetPlayer(string id)
+        {
+            IEnumerable<Player> matchingPlayers = Players.Where(player => player.Id.Equals(id));
+
+            if (matchingPlayers.Count() == 0)
+                throw new ArgumentException($"Игрок {id} не существует.");
+
+            return matchingPlayers.First();
+        }
+
+        #endregion
 
         #region Id Management
 
@@ -46,8 +57,8 @@ namespace HorrorGameDBManager
             Artifacts.Last().Id + 1 :
             1);
 
-        public static byte GenerateArtifactRarityId() => (byte) (ArtifactRarities.Any() ?
-            ArtifactRarities.Last().Id + 1 :
+        public static byte GenerateRarityLevelId() => (byte) (RarityLevels.Any() ?
+            RarityLevels.Last().Id + 1 :
             1);
 
         public static ulong GenerateCollectedArtifactId() => CollectedArtifacts.Any() ?
@@ -58,13 +69,13 @@ namespace HorrorGameDBManager
             Entities.Last().Id + 1 :
             1);
 
+        public static byte GenerateGameModeId() => (byte) (GameModes.Any() ?
+            GameModes.Last().Id + 1 :
+            1);
+
         public static ulong GenerateGameSessionId() => GameSessions.Any() ?
             GameSessions.Last().Id + 1 :
             1;
-
-        public static byte GenerateGameTypeId() => (byte) (GameTypes.Any() ?
-            GameTypes.Last().Id + 1 :
-            1);
 
         public static string GeneratePlayerId()
         {
@@ -91,6 +102,22 @@ namespace HorrorGameDBManager
         public static ushort GenerateServerId() => (ushort) (Servers.Any() ?
             Servers.Last().Id + 1 :
             1);
+
+        #endregion
+
+        #region Existence Checkers
+
+        public static bool AbilityExists(byte id) => Abilities.Select(ability => ability.Id).Contains(id);
+        public static bool AcquiredAbilityExists(ulong id) => AcquiredAbilities.Select(acquiredAbility => acquiredAbility.Id).Contains(id);
+        public static bool ArtifactExists(byte id) => Artifacts.Select(artifact => artifact.Id).Contains(id);
+        public static bool CollectedArtifactExists(ulong id) => CollectedArtifacts.Select(collectedArtifact => collectedArtifact.Id).Contains(id);
+        public static bool EntityExists(byte id) => Entities.Select(entity => entity.Id).Contains(id);
+        public static bool GameModeExists(byte id) => GameModes.Select(gameMode => gameMode.Id).Contains(id);
+        public static bool GameSessionExists(ulong id) => GameSessions.Select(gameSession => gameSession.Id).Contains(id);
+        public static bool PlayerExists(string id) => Players.Select(player => player.Id).Contains(id);
+        public static bool PlayerSessionExists(ulong id) => PlayerSessions.Select(playerSession => playerSession.Id).Contains(id);
+        public static bool RarityLevelExists(byte id) => RarityLevels.Select(rarityLevel => rarityLevel.Id).Contains(id);
+        public static bool ServerExists(ushort id) => Servers.Select(server => server.Id).Contains(id);
 
         #endregion
     }

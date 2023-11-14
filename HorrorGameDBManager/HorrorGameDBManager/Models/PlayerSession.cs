@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Linq;
 
 namespace HorrorGameDBManager.Models
 {
     internal class PlayerSession
     {
-        public ulong Id { get; }
         public ulong GameSessionId { get; }
         public string PlayerId { get; }
         public bool? IsFinished { get; set; }
@@ -16,8 +14,6 @@ namespace HorrorGameDBManager.Models
 
         public PlayerSession(ulong gameSessionId, string playerId)
         {
-            Id = Database.GeneratePlayerSessionId();
-
             if (Database.GameSessionExists(gameSessionId))
                 GameSessionId = gameSessionId;
             else
@@ -28,7 +24,7 @@ namespace HorrorGameDBManager.Models
             else
                 throw new ArgumentException($"Игрок {playerId} не существует.");
 
-            if (Database.Players.Where(player => player.Id.Equals(playerId)).First().EnableAnalytics)
+            if (Database.Players.Entries[playerId].EnableAnalytics)
             {
                 IsFinished = false;
                 IsWon = false;

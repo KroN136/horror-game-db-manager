@@ -4,7 +4,6 @@ namespace HorrorGameDBManager.Models
 {
     internal class Player
     {
-        public string Id { get; }
         public string Username { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
@@ -15,7 +14,6 @@ namespace HorrorGameDBManager.Models
 
         public Player(string username, string email, string password, bool enableAnalytics)
         {
-            Id = Database.GeneratePlayerId();
             Username = username;
             Email = email;
             Password = password;

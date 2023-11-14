@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace HorrorGameDBManager.Models
 {
@@ -27,7 +28,7 @@ namespace HorrorGameDBManager.Models
             else
                 throw new ArgumentException($"Игрок {playerId} не существует.");
 
-            if (Database.GetPlayer(playerId).EnableAnalytics)
+            if (Database.Players.Where(player => player.Id.Equals(playerId)).First().EnableAnalytics)
             {
                 IsFinished = false;
                 IsWon = false;

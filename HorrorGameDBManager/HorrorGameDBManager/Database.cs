@@ -19,20 +19,6 @@ namespace HorrorGameDBManager
         public static List<RarityLevel> RarityLevels { get; private set; } = new List<RarityLevel>();
         public static List<Server> Servers { get; private set; } = new List<Server>();
 
-        #region Getters
-
-        public static Player GetPlayer(string id)
-        {
-            IEnumerable<Player> matchingPlayers = Players.Where(player => player.Id.Equals(id));
-
-            if (matchingPlayers.Count() == 0)
-                throw new ArgumentException($"Игрок {id} не существует.");
-
-            return matchingPlayers.First();
-        }
-
-        #endregion
-
         #region Id Management
 
         private const string possibleCharacters = "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz0123456789_-";

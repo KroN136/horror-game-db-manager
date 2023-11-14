@@ -7,17 +7,152 @@ namespace HorrorGameDBManager
 {
     internal static class Database
     {
-        public static List<Ability> Abilities { get; private set; } = new List<Ability>();
-        public static List<AcquiredAbility> AcquiredAbilities { get; private set; } = new List<AcquiredAbility>();
-        public static List<Artifact> Artifacts { get; private set; } = new List<Artifact>();
-        public static List<CollectedArtifact> CollectedArtifacts { get; private set; } = new List<CollectedArtifact>();
-        public static List<Entity> Entities { get; private set; } = new List<Entity>();
-        public static List<GameMode> GameModes { get; private set; } = new List<GameMode>();
-        public static List<GameSession> GameSessions { get; private set; } = new List<GameSession>();
-        public static List<Player> Players { get; private set; } = new List<Player>();
-        public static List<PlayerSession> PlayerSessions { get; private set; } = new List<PlayerSession>();
-        public static List<RarityLevel> RarityLevels { get; private set; } = new List<RarityLevel>();
-        public static List<Server> Servers { get; private set; } = new List<Server>();
+        #region Tables
+
+        private static List<Ability> abilities = new List<Ability>();
+        public static IEnumerable<Ability> Abilities
+        {
+            get => new List<Ability>(abilities);
+            set
+            {
+                if (value == null)
+                    throw new ArgumentNullException(nameof(value));
+
+                abilities = value.ToList();
+            }
+        }
+
+        private static List<AcquiredAbility> acquiredAbilities = new List<AcquiredAbility>();
+        public static IEnumerable<AcquiredAbility> AcquiredAbilities
+        {
+            get => new List<AcquiredAbility>(acquiredAbilities);
+            set
+            {
+                if (value == null)
+                    throw new ArgumentNullException(nameof(value));
+
+                acquiredAbilities = value.ToList();
+            }
+        }
+
+        private static List<Artifact> artifacts = new List<Artifact>();
+        public static IEnumerable<Artifact> Artifacts
+        {
+            get => new List<Artifact>(artifacts);
+            set
+            {
+                if (value == null)
+                    throw new ArgumentNullException(nameof(value));
+                
+                artifacts = value.ToList();
+            }
+        }
+
+        private static List<CollectedArtifact> collectedArtifacts = new List<CollectedArtifact>();
+        public static IEnumerable<CollectedArtifact> CollectedArtifacts
+        {
+            get => new List<CollectedArtifact>(collectedArtifacts);
+            set
+            {
+                if (value == null)
+                    throw new ArgumentNullException(nameof(value));
+
+                collectedArtifacts = value.ToList();
+            }
+        }
+
+        private static List<Entity> entities = new List<Entity>();
+        public static IEnumerable<Entity> Entities
+        {
+            get => new List<Entity>(entities);
+            set
+            {
+                if (value == null)
+                    throw new ArgumentNullException(nameof(value));
+
+                entities = value.ToList();
+            }
+        }
+
+        private static List<GameMode> gameModes = new List<GameMode>();
+        public static IEnumerable<GameMode> GameModes
+        {
+            get => new List<GameMode>(gameModes);
+            set
+            {
+                if (value == null)
+                    throw new ArgumentNullException(nameof(value));
+
+                gameModes = value.ToList();
+            }
+        }
+
+        private static List<GameSession> gameSessions = new List<GameSession>();
+        public static IEnumerable<GameSession> GameSessions
+        {
+            get => new List<GameSession>(gameSessions);
+            set
+            {
+                if (value == null)
+                    throw new ArgumentNullException(nameof(value));
+
+                gameSessions = value.ToList();
+            }
+        }
+
+        private static List<Player> players = new List<Player>();
+        public static IEnumerable<Player> Players
+        {
+            get => new List<Player>(players);
+            set
+            {
+                if (value == null)
+                    throw new ArgumentNullException(nameof(value));
+
+                players = value.ToList();
+            }
+        }
+
+        private static List<PlayerSession> playerSessions = new List<PlayerSession>();
+        public static IEnumerable<PlayerSession> PlayerSessions
+        {
+            get => new List<PlayerSession>(playerSessions);
+            set
+            {
+                if (value == null)
+                    throw new ArgumentNullException(nameof(value));
+
+                playerSessions = value.ToList();
+            }
+        }
+
+        private static List<RarityLevel> rarityLevels = new List<RarityLevel>();
+        public static IEnumerable<RarityLevel> RarityLevels
+        {
+            get => new List<RarityLevel>(rarityLevels);
+            set
+            {
+                if (value == null)
+                    throw new ArgumentNullException(nameof(value));
+
+                rarityLevels = value.ToList();
+            }
+        }
+
+        private static List<Server> servers = new List<Server>();
+        public static IEnumerable<Server> Servers
+        {
+            get => new List<Server>(servers);
+            set
+            {
+                if (value == null)
+                    throw new ArgumentNullException(nameof(value));
+
+                servers = value.ToList();
+            }
+        }
+
+        #endregion
 
         #region Id Management
 

@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33403.182
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HorrorGameDBManager", "HorrorGameDBManager\HorrorGameDBManager.csproj", "{D35DCCC0-32FB-4A3D-9835-A39771C4BCA1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HorrorGameDBManager", "HorrorGameDBManager\HorrorGameDBManager.csproj", "{21F77C25-422C-48CC-8EAE-7DD0C9EEDCDF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{D35DCCC0-32FB-4A3D-9835-A39771C4BCA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D35DCCC0-32FB-4A3D-9835-A39771C4BCA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D35DCCC0-32FB-4A3D-9835-A39771C4BCA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D35DCCC0-32FB-4A3D-9835-A39771C4BCA1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{21F77C25-422C-48CC-8EAE-7DD0C9EEDCDF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21F77C25-422C-48CC-8EAE-7DD0C9EEDCDF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{21F77C25-422C-48CC-8EAE-7DD0C9EEDCDF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21F77C25-422C-48CC-8EAE-7DD0C9EEDCDF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {4136747B-BF5E-49DC-8219-7982163CD354}
+		SolutionGuid = {7624384D-D877-4754-AF15-DECEDDF4EF62}
 	EndGlobalSection
 EndGlobal

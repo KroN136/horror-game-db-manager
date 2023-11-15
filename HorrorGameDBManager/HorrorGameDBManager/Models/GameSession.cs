@@ -1,8 +1,8 @@
-﻿using System;
+﻿using HorrorGameDBManager.Models.Base;
 
 namespace HorrorGameDBManager.Models
 {
-    internal class GameSession
+    internal class GameSession : ModelWithULongId
     {
         public ushort ServerId { get; }
         public byte GameModeId { get; }

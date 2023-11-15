@@ -1,6 +1,8 @@
-﻿namespace HorrorGameDBManager.Models
+﻿using HorrorGameDBManager.Models.Base;
+
+namespace HorrorGameDBManager.Models
 {
-    internal class Server
+    internal class Server : ModelWithUShortId
     {
         public string IpAddress { get; }
         public ushort PlayerCapacity { get; set; }

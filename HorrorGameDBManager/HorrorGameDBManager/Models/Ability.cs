@@ -1,6 +1,8 @@
-﻿namespace HorrorGameDBManager.Models
+﻿using HorrorGameDBManager.Models.Base;
+
+namespace HorrorGameDBManager.Models
 {
-    internal class Ability
+    internal class Ability : ModelWithByteId
     {
         public string AssetName { get; set; }
 

@@ -1,8 +1,8 @@
-﻿using System;
+﻿using HorrorGameDBManager.Models.Base;
 
 namespace HorrorGameDBManager.Models
 {
-    internal class Player
+    internal class Player : ModelWithStringId
     {
         public string Username { get; set; }
         public string Email { get; set; }
@@ -12,7 +12,7 @@ namespace HorrorGameDBManager.Models
         public bool IsOnline { get; set; }
         public bool EnableAnalytics { get; set; }
 
-        public Player(string username, string email, string password, bool enableAnalytics)
+        public Player(string username, string email, string password, bool enableAnalytics) : base(8)
         {
             Username = username;
             Email = email;

@@ -1,8 +1,8 @@
-﻿using System;
+﻿using HorrorGameDBManager.Models.Base;
 
 namespace HorrorGameDBManager.Models
 {
-    internal class AcquiredAbility
+    internal class AcquiredAbility : ModelWithULongId
     {
         public string PlayerId { get; }
         public byte AbilityId { get; }

@@ -1,6 +1,8 @@
-﻿namespace HorrorGameDBManager.Models
+﻿using HorrorGameDBManager.Models.Base;
+
+namespace HorrorGameDBManager.Models
 {
-    internal class GameMode
+    internal class GameMode : ModelWithByteId
     {
         public string AssetName { get; set; }
         public byte PlayerCount { get; set; }

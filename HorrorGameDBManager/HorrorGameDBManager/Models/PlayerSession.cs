@@ -1,6 +1,8 @@
-﻿namespace HorrorGameDBManager.Models
+﻿using HorrorGameDBManager.Models.Base;
+
+namespace HorrorGameDBManager.Models
 {
-    internal class PlayerSession
+    internal class PlayerSession : ModelWithULongId
     {
         public ulong GameSessionId { get; }
         public string PlayerId { get; }
@@ -22,7 +24,7 @@
             else
                 throw new ArgumentException($"Игрок {playerId} не существует.");
 
-            if (Database.Players.GetEntries()[playerId].EnableAnalytics)
+            if (Database.Players.GetAll()[playerId].EnableAnalytics)
             {
                 IsFinished = false;
                 IsWon = false;

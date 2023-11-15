@@ -1,8 +1,8 @@
-﻿using System;
+﻿using HorrorGameDBManager.Models.Base;
 
 namespace HorrorGameDBManager.Models
 {
-    internal class Artifact
+    internal class Artifact : ModelWithByteId
     {
         public string AssetName { get; set; }
         public byte RarityLevelId { get; }

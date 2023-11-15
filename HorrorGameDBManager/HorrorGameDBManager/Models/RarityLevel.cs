@@ -1,6 +1,8 @@
-﻿namespace HorrorGameDBManager.Models
+﻿using HorrorGameDBManager.Models.Base;
+
+namespace HorrorGameDBManager.Models
 {
-    internal class RarityLevel
+    internal class RarityLevel : ModelWithByteId
     {
         public string AssetName { get; set; }
         public float Probability { get; set; }

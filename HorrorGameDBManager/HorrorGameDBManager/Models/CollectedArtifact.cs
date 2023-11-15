@@ -1,8 +1,8 @@
-﻿using System;
+﻿using HorrorGameDBManager.Models.Base;
 
 namespace HorrorGameDBManager.Models
 {
-    internal class CollectedArtifact
+    internal class CollectedArtifact : ModelWithULongId
     {
         public string PlayerId { get; }
         public byte ArtifactId { get; }

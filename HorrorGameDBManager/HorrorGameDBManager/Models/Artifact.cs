@@ -11,7 +11,7 @@ namespace HorrorGameDBManager.Models
         {
             AssetName = assetName;
 
-            if (Database.RarityLevelExists(rarityLevelId))
+            if (Database.RarityLevels.Exists(rarityLevelId))
                 RarityLevelId = rarityLevelId;
             else
                 throw new ArgumentException($"Уровень редкости {rarityLevelId} не существует.");

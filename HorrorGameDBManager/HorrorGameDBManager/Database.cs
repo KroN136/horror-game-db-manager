@@ -15,17 +15,5 @@ namespace HorrorGameDBManager
         public static Table<PlayerSession> PlayerSessions { get; set; } = new Table<PlayerSession>();
         public static Table<RarityLevel> RarityLevels { get; set; } = new Table<RarityLevel>();
         public static Table<Server> Servers { get; set; } = new Table<Server>();
-
-        public static bool AbilityExists(byte id) => Abilities.Exists(id);
-        public static bool AcquiredAbilityExists(ulong id) => AcquiredAbilities.Exists(id);
-        public static bool ArtifactExists(byte id) => Artifacts.Exists(id);
-        public static bool CollectedArtifactExists(ulong id) => CollectedArtifacts.Exists(id);
-        public static bool EntityExists(byte id) => Entities.Exists(id);
-        public static bool GameModeExists(byte id) => GameModes.Exists(id);
-        public static bool GameSessionExists(ulong id) => GameSessions.Exists(id);
-        public static bool PlayerExists(string id) => Players.Exists(id);
-        public static bool PlayerSessionExists(ulong id) => PlayerSessions.Exists(id);
-        public static bool RarityLevelExists(byte id) => RarityLevels.Exists(id);
-        public static bool ServerExists(ushort id) => Servers.Exists(id);
     }
 }

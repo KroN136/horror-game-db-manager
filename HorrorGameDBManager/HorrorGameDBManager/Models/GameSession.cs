@@ -11,12 +11,12 @@ namespace HorrorGameDBManager.Models
 
         public GameSession(ushort serverId, byte gameModeId)
         {
-            if (Database.ServerExists(serverId))
+            if (Database.Servers.Exists(serverId))
                 ServerId = serverId;
             else
                 throw new ArgumentException($"Сервер {serverId} не существует.");
 
-            if (Database.GameModeExists(gameModeId))
+            if (Database.GameModes.Exists(gameModeId))
                 GameModeId = gameModeId;
             else
                 throw new ArgumentException($"Режим игры {gameModeId} не существует.");

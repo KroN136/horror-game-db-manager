@@ -9,12 +9,12 @@ namespace HorrorGameDBManager.Models
 
         public AcquiredAbility(string playerId, byte abilityId)
         {
-            if (Database.PlayerExists(playerId))
+            if (Database.Players.Exists(playerId))
                 PlayerId = playerId;
             else
                 throw new ArgumentException($"Игрок {playerId} не существует.");
 
-            if (Database.AbilityExists(abilityId))
+            if (Database.Abilities.Exists(abilityId))
                 AbilityId = abilityId;
             else
                 throw new ArgumentException($"Способность {abilityId} не существует.");

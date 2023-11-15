@@ -10,17 +10,17 @@ namespace HorrorGameDBManager.Models
 
         public CollectedArtifact(string playerId, byte artifactId, ulong gameSessionId)
         {
-            if (Database.PlayerExists(playerId))
+            if (Database.Players.Exists(playerId))
                 PlayerId = playerId;
             else
                 throw new ArgumentException($"Игрок {playerId} не существует.");
 
-            if (Database.ArtifactExists(artifactId))
+            if (Database.Artifacts.Exists(artifactId))
                 ArtifactId = artifactId;
             else
                 throw new ArgumentException($"Артефакт {artifactId} не существует.");
 
-            if (Database.GameSessionExists(gameSessionId))
+            if (Database.GameSessions.Exists(gameSessionId))
                 GameSessionId = gameSessionId;
             else
                 throw new ArgumentException($"Игровая сессия {gameSessionId} не существует.");

@@ -14,12 +14,12 @@ namespace HorrorGameDBManager.Models
 
         public PlayerSession(ulong gameSessionId, string playerId)
         {
-            if (Database.GameSessionExists(gameSessionId))
+            if (Database.GameSessions.Exists(gameSessionId))
                 GameSessionId = gameSessionId;
             else
                 throw new ArgumentException($"Игровая сессия {gameSessionId} не существует.");
 
-            if (Database.PlayerExists(playerId))
+            if (Database.Players.Exists(playerId))
                 PlayerId = playerId;
             else
                 throw new ArgumentException($"Игрок {playerId} не существует.");

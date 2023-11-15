@@ -4,6 +4,8 @@ namespace HorrorGameDBManager.Models
 {
     internal class Player : ModelWithStringId
     {
+        private static readonly List<object> existingIds = new();
+
         public string Username { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
@@ -14,6 +16,9 @@ namespace HorrorGameDBManager.Models
 
         public Player(string username, string email, string password, bool enableAnalytics) : base(8)
         {
+            Id = GenerateId(existingIds);
+            existingIds.Add(Id);
+
             Username = username;
             Email = email;
             Password = password;

@@ -4,6 +4,8 @@ namespace HorrorGameDBManager.Models
 {
     internal class GameSession : ModelWithULongId
     {
+        private static readonly List<object> existingIds = new();
+
         public ushort ServerId { get; }
         public byte GameModeId { get; }
         public DateTime StartDateTime { get; }
@@ -11,6 +13,9 @@ namespace HorrorGameDBManager.Models
 
         public GameSession(ushort serverId, byte gameModeId)
         {
+            Id = GenerateId(existingIds);
+            existingIds.Add(Id);
+
             if (Database.Servers.Exists(serverId))
                 ServerId = serverId;
             else

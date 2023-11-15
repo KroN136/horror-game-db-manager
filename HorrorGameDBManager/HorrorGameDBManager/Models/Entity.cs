@@ -4,6 +4,8 @@ namespace HorrorGameDBManager.Models
 {
     internal class Entity : ModelWithByteId
     {
+        private static readonly List<object> existingIds = new();
+
         public string AssetName { get; set; }
         public float Health { get; set; }
         public float MovementSpeed { get; set; }
@@ -11,6 +13,9 @@ namespace HorrorGameDBManager.Models
 
         public Entity(string assetName, float health, float movementSpeed, uint requiredXp)
         {
+            Id = GenerateId(existingIds);
+            existingIds.Add(Id);
+
             AssetName = assetName;
             Health = health;
             MovementSpeed = movementSpeed;

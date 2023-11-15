@@ -4,26 +4,26 @@ namespace HorrorGameDBManager
 {
     internal class Table<T> where T : Model
     {
-        protected Dictionary<object, T> entries = new();
+        protected List<T> entries = new();
 
-        public Dictionary<object, T> GetAll() => new(entries);
-        public void SetAll(Dictionary<object, T> entries) =>
+        public List<T> GetAll() => new(entries);
+        public void SetAll(List<T> entries) =>
             this.entries = entries ?? throw new ArgumentNullException(nameof(entries));
 
         public Table() { }
-        public Table(Dictionary<object, T> entries) => SetAll(entries);
+        public Table(List<T> entries) => SetAll(entries);
 
-        public bool Exists(object id) => entries.ContainsKey(id);
+        public bool Exists(object id) => entries.Any(entry => entry.Id.Equals(id));
 
         public T Get(object id)
         {
             if (id == null)
                 throw new ArgumentNullException(nameof(id));
 
-            if (entries.ContainsKey(id) == false)
+            if (!Exists(id))
                 throw new ArgumentException($"Запись с идентификатором {id} не существует.");
 
-            return entries[id];
+            return entries.Find(entry => entry.Id.Equals(id))!;
         }
 
         public void Add(T entry)
@@ -31,8 +31,7 @@ namespace HorrorGameDBManager
             if (entry == null)
                 throw new ArgumentNullException(nameof(entry));
 
-            object id = entry.GenerateId(entries.Keys);
-            entries[id] = entry;
+            entries.Add(entry);
         }
 
         public void Add(IEnumerable<T> entries)
@@ -43,11 +42,7 @@ namespace HorrorGameDBManager
             if (entries.Any(entry => entry == null))
                 throw new ArgumentException("Одна или несколько добавляемых записей была(-и) NULL.");
 
-            foreach (T entry in entries)
-            {
-                object id = entry.GenerateId(this.entries.Keys);
-                this.entries[id] = entry;
-            }
+            this.entries.AddRange(entries);
         }
 
         public void Remove(object id)
@@ -55,10 +50,10 @@ namespace HorrorGameDBManager
             if (id == null)
                 throw new ArgumentNullException(nameof(id));
 
-            if (entries.ContainsKey(id) == false)
+            if (!Exists(id))
                 throw new ArgumentException($"Запись с идентификатором {id} не существует.");
 
-            entries.Remove(id);
+            entries.Remove(entries.Find(entry => entry.Id.Equals(id))!);
         }
     }
 }

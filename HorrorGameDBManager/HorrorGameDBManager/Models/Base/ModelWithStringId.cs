@@ -9,7 +9,7 @@
 
         private string GenerateStringId(int length)
         {
-            Random random = new Random();
+            Random random = new();
 
             return new string(Enumerable.Repeat(POSSIBLE_ID_CHARACTERS, length)
                 .Select(s => s[random.Next(s.Length)]).ToArray());

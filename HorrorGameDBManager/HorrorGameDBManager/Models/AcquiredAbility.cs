@@ -9,10 +9,13 @@ namespace HorrorGameDBManager.Models
         public string PlayerId { get; }
         public byte AbilityId { get; }
 
-        public AcquiredAbility(string playerId, byte abilityId)
+        public AcquiredAbility(string playerId, byte abilityId, bool generateId = true)
         {
-            Id = GenerateId(existingIds);
-            existingIds.Add(Id);
+            if (generateId)
+            {
+                Id = GenerateId(existingIds);
+                existingIds.Add(Id);
+            }
 
             if (Database.Players.Exists(playerId))
                 PlayerId = playerId;
@@ -24,5 +27,7 @@ namespace HorrorGameDBManager.Models
             else
                 throw new ArgumentException($"Способность {abilityId} не существует.");
         }
+
+        public override AcquiredAbility Clone() => new(PlayerId, AbilityId, false) { Id = Id };
     }
 }

@@ -14,10 +14,13 @@ namespace HorrorGameDBManager.Models
         public bool? PlayedAsEntity { get; set; }
         public byte? EntityId { get; set; }
 
-        public PlayerSession(ulong gameSessionId, string playerId)
+        public PlayerSession(ulong gameSessionId, string playerId, bool generateId = true)
         {
-            Id = GenerateId(existingIds);
-            existingIds.Add(Id);
+            if (generateId)
+            {
+                Id = GenerateId(existingIds);
+                existingIds.Add(Id);
+            }
 
             if (Database.GameSessions.Exists(gameSessionId))
                 GameSessionId = gameSessionId;
@@ -29,7 +32,7 @@ namespace HorrorGameDBManager.Models
             else
                 throw new ArgumentException($"Игрок {playerId} не существует.");
 
-            if (Database.Players.Get(playerId).EnableAnalytics)
+            if (Database.Players.Get(playerId).EnableDataCollection)
             {
                 IsFinished = false;
                 IsWon = false;
@@ -46,5 +49,7 @@ namespace HorrorGameDBManager.Models
 
             EntityId = null;
         }
+
+        public override PlayerSession Clone() => new(GameSessionId, PlayerId, false) { Id = Id, IsFinished = IsFinished, IsWon = IsWon, TimeAlive = TimeAlive, PlayedAsEntity = PlayedAsEntity, EntityId = EntityId };
     }
 }

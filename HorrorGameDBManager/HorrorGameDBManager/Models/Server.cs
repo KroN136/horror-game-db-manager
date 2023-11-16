@@ -6,18 +6,25 @@ namespace HorrorGameDBManager.Models
     {
         private static readonly List<object> existingIds = new();
 
-        public string IpAddress { get; }
+        public string IpAddress { get; set; }
         public ushort PlayerCapacity { get; set; }
         public bool IsActive { get; set; }
+        public ushort PlayerCount { get; set; }
 
-        public Server(string ipAddress, ushort playerCapacity, bool isActive)
+        public Server(string ipAddress, ushort playerCapacity, bool isActive, bool generateId = true)
         {
-            Id = GenerateId(existingIds);
-            existingIds.Add(Id);
+            if (generateId)
+            {
+                Id = GenerateId(existingIds);
+                existingIds.Add(Id);
+            }
 
             IpAddress = ipAddress;
             PlayerCapacity = playerCapacity;
             IsActive = isActive;
+            PlayerCount = 0;
         }
+
+        public override Server Clone() => new(IpAddress, PlayerCapacity, IsActive, false) { Id = Id, PlayerCount = PlayerCount };
     }
 }

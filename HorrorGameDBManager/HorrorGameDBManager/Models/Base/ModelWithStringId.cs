@@ -1,6 +1,6 @@
 ﻿namespace HorrorGameDBManager.Models.Base
 {
-    internal abstract class ModelWithStringId : Model
+    internal abstract class ModelWithStringId/*(int idLength)*/ : Model
     {
         private readonly int idLength;
         private const string POSSIBLE_ID_CHARACTERS = "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz0123456789_-";
@@ -15,7 +15,7 @@
                 .Select(s => s[random.Next(s.Length)]).ToArray());
         }
 
-        public override object GenerateId(IEnumerable<object> existingIds)
+        protected override object GenerateId(IEnumerable<object> existingIds)
         {
             string id;
 

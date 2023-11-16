@@ -8,12 +8,17 @@ namespace HorrorGameDBManager.Models
 
         public string AssetName { get; set; }
 
-        public Ability(string assetName)
+        public Ability(string assetName, bool generateId = true)
         {
-            Id = GenerateId(existingIds);
-            existingIds.Add(Id);
+            if (generateId)
+            {
+                Id = GenerateId(existingIds);
+                existingIds.Add(Id);
+            }
 
             AssetName = assetName;
         }
+
+        public override Ability Clone() => new(AssetName, false) { Id = Id };
     }
 }

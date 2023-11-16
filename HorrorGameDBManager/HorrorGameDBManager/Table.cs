@@ -34,7 +34,7 @@ namespace HorrorGameDBManager
             if (!Exists(id))
                 throw new ArgumentException($"Запись с идентификатором {id} не существует.");
 
-            return entries.Find(entry => entry.Id.Equals(id))!;
+            return (T) entries.Find(entry => entry.Id.Equals(id))!.Clone();
         }
 
         public void Add(T entry)
@@ -54,6 +54,18 @@ namespace HorrorGameDBManager
                 throw new ArgumentException("Одна или несколько добавляемых записей была(-и) NULL.");
 
             this.entries.AddRange(entries);
+        }
+
+        public void Edit(object id, T newEntry)
+        {
+            if (id == null)
+                throw new ArgumentNullException(nameof(id));
+
+            if (!Exists(id))
+                throw new ArgumentException($"Запись с идентификатором {id} не существует.");
+
+            T entry = entries.Find(entry => entry.Id.Equals(id))!;
+            entries[entries.IndexOf(entry)] = newEntry;
         }
 
         public void Remove(object id)

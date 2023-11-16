@@ -7,12 +7,15 @@ namespace HorrorGameDBManager.Models
         private static readonly List<object> existingIds = new();
 
         public string AssetName { get; set; }
-        public byte RarityLevelId { get; }
+        public byte RarityLevelId { get; set; }
 
-        public Artifact(string assetName, byte rarityLevelId)
+        public Artifact(string assetName, byte rarityLevelId, bool generateId = true)
         {
-            Id = GenerateId(existingIds);
-            existingIds.Add(Id);
+            if (generateId)
+            {
+                Id = GenerateId(existingIds);
+                existingIds.Add(Id);
+            }
 
             AssetName = assetName;
 
@@ -21,5 +24,7 @@ namespace HorrorGameDBManager.Models
             else
                 throw new ArgumentException($"Уровень редкости {rarityLevelId} не существует.");
         }
+
+        public override Artifact Clone() => new(AssetName, RarityLevelId, false) { Id = Id };
     }
 }

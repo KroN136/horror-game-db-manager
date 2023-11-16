@@ -10,10 +10,13 @@ namespace HorrorGameDBManager.Models
         public byte ArtifactId { get; }
         public ulong PlayerSessionId { get; }
 
-        public CollectedArtifact(string playerId, byte artifactId, ulong playerSessionId)
+        public CollectedArtifact(string playerId, byte artifactId, ulong playerSessionId, bool generateId = true)
         {
-            Id = GenerateId(existingIds);
-            existingIds.Add(Id);
+            if (generateId)
+            {
+                Id = GenerateId(existingIds);
+                existingIds.Add(Id);
+            }
 
             if (Database.Players.Exists(playerId))
                 PlayerId = playerId;
@@ -34,5 +37,7 @@ namespace HorrorGameDBManager.Models
             ArtifactId = artifactId;
             PlayerSessionId = playerSessionId;
         }
+
+        public override CollectedArtifact Clone() => new(PlayerId, ArtifactId, PlayerSessionId, false) { Id = Id };
     }
 }

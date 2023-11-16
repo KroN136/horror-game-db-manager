@@ -8,9 +8,9 @@ namespace HorrorGameDBManager.Models
 
         public string PlayerId { get; }
         public byte ArtifactId { get; }
-        public ulong GameSessionId { get; }
+        public ulong PlayerSessionId { get; }
 
-        public CollectedArtifact(string playerId, byte artifactId, ulong gameSessionId)
+        public CollectedArtifact(string playerId, byte artifactId, ulong playerSessionId)
         {
             Id = GenerateId(existingIds);
             existingIds.Add(Id);
@@ -25,14 +25,14 @@ namespace HorrorGameDBManager.Models
             else
                 throw new ArgumentException($"Артефакт {artifactId} не существует.");
 
-            if (Database.GameSessions.Exists(gameSessionId))
-                GameSessionId = gameSessionId;
+            if (Database.GameSessions.Exists(playerSessionId))
+                PlayerSessionId = playerSessionId;
             else
-                throw new ArgumentException($"Игровая сессия {gameSessionId} не существует.");
+                throw new ArgumentException($"Сессия игрока {playerSessionId} не существует.");
 
             PlayerId = playerId;
             ArtifactId = artifactId;
-            GameSessionId = gameSessionId;
+            PlayerSessionId = playerSessionId;
         }
     }
 }

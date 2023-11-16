@@ -4,14 +4,25 @@ namespace HorrorGameDBManager
 {
     internal class Table<T> where T : Model
     {
+        public string Name { get; }
+        private static List<string> names = new();
+
         protected List<T> entries = new();
 
         public List<T> GetAll() => new(entries);
         public void SetAll(List<T> entries) =>
             this.entries = entries ?? throw new ArgumentNullException(nameof(entries));
 
-        public Table() { }
-        public Table(List<T> entries) => SetAll(entries);
+        public Table(string name)
+        {
+            if (string.IsNullOrEmpty(name))
+                throw new ArgumentNullException(nameof(name));
+
+            if (names.Contains(name))
+                throw new ArgumentException($"Таблица {name} уже существует.");
+
+            Name = name;
+        }
 
         public bool Exists(object id) => entries.Any(entry => entry.Id.Equals(id));
 

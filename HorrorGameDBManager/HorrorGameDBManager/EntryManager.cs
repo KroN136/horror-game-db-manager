@@ -445,6 +445,9 @@ namespace HorrorGameDBManager
                     return;
             }
 
+            if (Database.ExperienceLevels.Entries.Count == 1 && (Database.Entities.Entries.Any() || Database.Players.Entries.Any()))
+                throw new ConstraintException("Невозможно удалить единственный уровень опыта, так как к нему привязана одна или несколько сущностей и/или игроков.");
+
             var experienceLevel = Database.ExperienceLevels.Get(id);
 
             var experienceLevelIds = Database.ExperienceLevels.Entries.Select(experienceLevel => experienceLevel.Id).ToList();
@@ -563,6 +566,9 @@ namespace HorrorGameDBManager
                 if (!ConfirmRemoval())
                     return;
             }
+
+            if (Database.RarityLevels.Entries.Count == 1 && Database.Artifacts.Entries.Any())
+                throw new ConstraintException("Невозможно удалить единственный уровень редкости, так как к нему привязан один или несколько артефактов.");
 
             var rarityLevel = Database.RarityLevels.Get(id);
 

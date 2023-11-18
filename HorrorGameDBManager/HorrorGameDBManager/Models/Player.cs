@@ -10,7 +10,9 @@ namespace HorrorGameDBManager.Models
         public string Email { get; set; }
         public string Password { get; set; }
         public DateTime RegistrationDateTime { get; private set; }
-        public uint Xp { get; set; }
+        public byte ExperienceLevelId { get; set; }
+        public ushort ExperiencePoints { get; set; }
+        public byte AbilityPoints { get; set; }
         public bool IsOnline { get; set; }
         public bool EnableDataCollection { get; set; }
 
@@ -26,11 +28,13 @@ namespace HorrorGameDBManager.Models
             Email = email;
             Password = password;
             RegistrationDateTime = DateTime.UtcNow;
-            Xp = 0;
+            ExperienceLevelId = (byte) Database.ExperienceLevels.GetAll().First().Id;
+            ExperiencePoints = 0;
+            AbilityPoints = 0;
             IsOnline = false;
             EnableDataCollection = enableDataCollection;
         }
 
-        public override Player Clone() => new(Username, Email, Password, EnableDataCollection, false) { Id = Id, RegistrationDateTime = RegistrationDateTime, Xp = Xp, IsOnline = IsOnline };
+        public override Player Clone() => new(Username, Email, Password, EnableDataCollection, false) { Id = Id, RegistrationDateTime = RegistrationDateTime, ExperienceLevelId = ExperienceLevelId, ExperiencePoints = ExperiencePoints, AbilityPoints = AbilityPoints, IsOnline = IsOnline };
     }
 }

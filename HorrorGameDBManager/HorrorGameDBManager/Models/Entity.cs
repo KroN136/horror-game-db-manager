@@ -9,9 +9,9 @@ namespace HorrorGameDBManager.Models
         public string AssetName { get; set; }
         public float Health { get; set; }
         public float MovementSpeed { get; set; }
-        public uint RequiredXp { get; set; }
+        public byte RequiredExperienceLevelId { get; set; }
 
-        public Entity(string assetName, float health, float movementSpeed, uint requiredXp, bool generateId = true)
+        public Entity(string assetName, float health, float movementSpeed, byte requiredExperienceLevelId, bool generateId = true)
         {
             if (generateId)
             {
@@ -22,9 +22,13 @@ namespace HorrorGameDBManager.Models
             AssetName = assetName;
             Health = health;
             MovementSpeed = movementSpeed;
-            RequiredXp = requiredXp;
+
+            if (Database.ExperienceLevels.Exists(requiredExperienceLevelId))
+                RequiredExperienceLevelId = requiredExperienceLevelId;
+            else
+                throw new ArgumentException($"Уровень опыта {requiredExperienceLevelId} не существует.");
         }
 
-        public override Entity Clone() => new(AssetName, Health, MovementSpeed, RequiredXp, false) { Id = Id };
+        public override Entity Clone() => new(AssetName, Health, MovementSpeed, RequiredExperienceLevelId, false) { Id = Id };
     }
 }

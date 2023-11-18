@@ -6,12 +6,12 @@ namespace HorrorGameDBManager.Models
     {
         private static readonly List<object> existingIds = new();
 
-        public ushort ServerId { get; }
-        public byte GameModeId { get; }
+        public ushort? ServerId { get; set; }
+        public byte? GameModeId { get; set; }
         public DateTime StartDateTime { get; private set; }
         public DateTime? EndDateTime { get; set; }
 
-        public GameSession(ushort serverId, byte gameModeId, bool generateId = true)
+        public GameSession(ushort? serverId, byte? gameModeId, bool generateId = true)
         {
             if (generateId)
             {
@@ -19,12 +19,12 @@ namespace HorrorGameDBManager.Models
                 existingIds.Add(Id);
             }
 
-            if (Database.Servers.Exists(serverId))
+            if (serverId.HasValue == false || Database.Servers.Exists(serverId))
                 ServerId = serverId;
             else
                 throw new ArgumentException($"Сервер {serverId} не существует.");
 
-            if (Database.GameModes.Exists(gameModeId))
+            if (gameModeId.HasValue == false || Database.GameModes.Exists(gameModeId))
                 GameModeId = gameModeId;
             else
                 throw new ArgumentException($"Режим игры {gameModeId} не существует.");

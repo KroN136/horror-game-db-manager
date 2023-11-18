@@ -9,6 +9,7 @@ namespace HorrorGameDBManager
         public static Table<Artifact> Artifacts { get; } = new Table<Artifact>("artifacts");
         public static Table<CollectedArtifact> CollectedArtifacts { get; } = new Table<CollectedArtifact>("collected_artifacts");
         public static Table<Entity> Entities { get; } = new Table<Entity>("entities");
+        public static Table<ExperienceLevel> ExperienceLevels { get; } = new Table<ExperienceLevel>("experience_levels");
         public static Table<GameMode> GameModes { get; } = new Table<GameMode>("game_modes");
         public static Table<GameSession> GameSessions { get; } = new Table<GameSession>("game_sessions");
         public static Table<Player> Players { get; } = new Table<Player>("players");

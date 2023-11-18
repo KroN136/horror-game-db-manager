@@ -1,4 +1,5 @@
 ﻿using HorrorGameDBManager.Models.Base;
+using System.Text.Json.Serialization;
 
 namespace HorrorGameDBManager.Models
 {
@@ -29,8 +30,23 @@ namespace HorrorGameDBManager.Models
                 throw new ArgumentException($"Уровень опыта {requiredExperienceLevelId} не существует.");
         }
 
+        [JsonConstructor]
+        public Entity(object id, string assetName, float health, float movementSpeed, byte requiredExperienceLevelId)
+        {
+            id = byte.Parse(id.ToString()!);
+            Id = id;
+            existingIds.Add(Id);
+
+            AssetName = assetName;
+            Health = health;
+            MovementSpeed = movementSpeed;
+            RequiredExperienceLevelId = requiredExperienceLevelId;
+        }
+
+        [JsonIgnore]
         public ExperienceLevel RequiredExperienceLevel => Database.ExperienceLevels.Get(RequiredExperienceLevelId);
-        public IEnumerable<PlayerSession> PlayerSessions => Database.PlayerSessions.GetAll().Where(playerSession => playerSession.UsedEntityId.HasValue && playerSession.UsedEntityId.Value.Equals(Id));
+        [JsonIgnore]
+        public IEnumerable<PlayerSession> PlayerSessions => Database.PlayerSessions.Entries.Where(playerSession => playerSession.UsedEntityId.HasValue && playerSession.UsedEntityId.Value.Equals(Id));
 
         public override Entity Clone() => new(AssetName, Health, MovementSpeed, RequiredExperienceLevelId, false) { Id = Id };
     }

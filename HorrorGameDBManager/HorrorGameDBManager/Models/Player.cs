@@ -1,4 +1,5 @@
 ﻿using HorrorGameDBManager.Models.Base;
+using System.Text.Json.Serialization;
 
 namespace HorrorGameDBManager.Models
 {
@@ -28,17 +29,39 @@ namespace HorrorGameDBManager.Models
             Email = email;
             Password = password;
             RegistrationDateTime = DateTime.UtcNow;
-            ExperienceLevelId = (byte) Database.ExperienceLevels.GetAll().First().Id;
+            ExperienceLevelId = (byte) Database.ExperienceLevels.Entries.First().Id;
             ExperiencePoints = 0;
             AbilityPoints = 0;
             IsOnline = false;
             EnableDataCollection = enableDataCollection;
         }
 
+        [JsonConstructor]
+        public Player(object id, string username, string email, string password, DateTime registrationDateTime, byte experienceLevelId, ushort experiencePoints, byte abilityPoints, bool isOnline, bool enableDataCollection) : base(8)
+        {
+            id = id.ToString()!;
+            Id = id;
+            existingIds.Add(Id);
+
+            Username = username;
+            Email = email;
+            Password = password;
+            RegistrationDateTime = registrationDateTime;
+            ExperienceLevelId = experienceLevelId;
+            ExperiencePoints = experiencePoints;
+            AbilityPoints = abilityPoints;
+            IsOnline = isOnline;
+            EnableDataCollection = enableDataCollection;
+        }
+
+        [JsonIgnore]
         public ExperienceLevel ExperienceLevel => Database.ExperienceLevels.Get(ExperienceLevelId);
-        public IEnumerable<AcquiredAbility> AcquiredAbilities => Database.AcquiredAbilities.GetAll().Where(acquiredAbility => acquiredAbility.PlayerId.Equals(Id));
-        public IEnumerable<CollectedArtifact> CollectedArtifacts => Database.CollectedArtifacts.GetAll().Where(collectedArtifact => collectedArtifact.PlayerId.Equals(Id));
-        public IEnumerable<PlayerSession> PlayerSessions => Database.PlayerSessions.GetAll().Where(playerSession => playerSession.PlayerId.Equals(Id));
+        [JsonIgnore]
+        public IEnumerable<AcquiredAbility> AcquiredAbilities => Database.AcquiredAbilities.Entries.Where(acquiredAbility => acquiredAbility.PlayerId.Equals(Id));
+        [JsonIgnore]
+        public IEnumerable<CollectedArtifact> CollectedArtifacts => Database.CollectedArtifacts.Entries.Where(collectedArtifact => collectedArtifact.PlayerId.Equals(Id));
+        [JsonIgnore]
+        public IEnumerable<PlayerSession> PlayerSessions => Database.PlayerSessions.Entries.Where(playerSession => playerSession.PlayerId.Equals(Id));
 
         public override Player Clone() => new(Username, Email, Password, EnableDataCollection, false) { Id = Id, RegistrationDateTime = RegistrationDateTime, ExperienceLevelId = ExperienceLevelId, ExperiencePoints = ExperiencePoints, AbilityPoints = AbilityPoints, IsOnline = IsOnline };
     }

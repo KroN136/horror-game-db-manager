@@ -1,4 +1,5 @@
 ﻿using HorrorGameDBManager.Models.Base;
+using System.Text.Json.Serialization;
 
 namespace HorrorGameDBManager.Models
 {
@@ -50,10 +51,30 @@ namespace HorrorGameDBManager.Models
             UsedEntityId = null;
         }
 
+        [JsonConstructor]
+        public PlayerSession(object id, ulong? gameSessionId, string playerId, bool? isFinished, bool? isWon, float? timeAlive, bool? playedAsEntity, byte? usedEntityId)
+        {
+            id = ulong.Parse(id.ToString()!);
+            Id = id;
+            existingIds.Add(Id);
+
+            GameSessionId = gameSessionId;
+            PlayerId = playerId;
+            IsFinished = isFinished;
+            IsWon = isWon;
+            TimeAlive = timeAlive;
+            PlayedAsEntity = playedAsEntity;
+            UsedEntityId = usedEntityId;
+        }
+
+        [JsonIgnore]
         public GameSession? GameSession => GameSessionId.HasValue ? Database.GameSessions.Get(GameSessionId) : null;
+        [JsonIgnore]
         public Player Player => Database.Players.Get(PlayerId);
+        [JsonIgnore]
         public Entity? UsedEntity => UsedEntityId.HasValue ? Database.Entities.Get(UsedEntityId) : null;
-        public IEnumerable<CollectedArtifact> CollectedArtifacts => Database.CollectedArtifacts.GetAll().Where(collectedArtifact => collectedArtifact.PlayerSessionId.Equals(Id));
+        [JsonIgnore]
+        public IEnumerable<CollectedArtifact> CollectedArtifacts => Database.CollectedArtifacts.Entries.Where(collectedArtifact => collectedArtifact.PlayerSessionId.Equals(Id));
 
         public override PlayerSession Clone() => new(GameSessionId, PlayerId, false) { Id = Id, IsFinished = IsFinished, IsWon = IsWon, TimeAlive = TimeAlive, PlayedAsEntity = PlayedAsEntity, UsedEntityId = UsedEntityId };
     }

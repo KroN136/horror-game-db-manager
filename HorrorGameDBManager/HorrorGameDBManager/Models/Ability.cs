@@ -1,4 +1,6 @@
 ﻿using HorrorGameDBManager.Models.Base;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace HorrorGameDBManager.Models
 {
@@ -19,7 +21,18 @@ namespace HorrorGameDBManager.Models
             AssetName = assetName;
         }
 
-        public IEnumerable<AcquiredAbility> AcquiredAbilities => Database.AcquiredAbilities.GetAll().Where(acquiredAbility => acquiredAbility.AbilityId.Equals(Id));
+        [JsonConstructor]
+        public Ability(object id, string assetName)
+        {
+            id = byte.Parse(id.ToString()!);
+            Id = id;
+            existingIds.Add(Id);
+
+            AssetName = assetName;
+        }
+
+        [JsonIgnore]
+        public IEnumerable<AcquiredAbility> AcquiredAbilities => Database.AcquiredAbilities.Entries.Where(acquiredAbility => acquiredAbility.AbilityId.Equals(Id));
 
         public override Ability Clone() => new(AssetName, false) { Id = Id };
     }

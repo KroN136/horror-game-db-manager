@@ -1,4 +1,5 @@
 ﻿using HorrorGameDBManager.Models.Base;
+using System.Text.Json.Serialization;
 
 namespace HorrorGameDBManager.Models
 {
@@ -33,9 +34,25 @@ namespace HorrorGameDBManager.Models
             EndDateTime = null;
         }
 
+        [JsonConstructor]
+        public GameSession(object id, ushort? serverId, byte? gameModeId, DateTime startDateTime, DateTime? endDateTime)
+        {
+            id = ulong.Parse(id.ToString()!);
+            Id = id;
+            existingIds.Add(Id);
+
+            ServerId = serverId;
+            GameModeId = gameModeId;
+            StartDateTime = startDateTime;
+            EndDateTime = endDateTime;
+        }
+
+        [JsonIgnore]
         public Server? Server => ServerId.HasValue ? Database.Servers.Get(ServerId) : null;
+        [JsonIgnore]
         public GameMode? GameMode => GameModeId.HasValue ? Database.GameModes.Get(GameModeId) : null;
-        public IEnumerable<PlayerSession> PlayerSessions => Database.PlayerSessions.GetAll().Where(playerSession => playerSession.GameSessionId.Equals(Id));
+        [JsonIgnore]
+        public IEnumerable<PlayerSession> PlayerSessions => Database.PlayerSessions.Entries.Where(playerSession => playerSession.GameSessionId.Equals(Id));
 
         public override GameSession Clone() => new(ServerId, GameModeId, false) { Id = Id, StartDateTime = StartDateTime, EndDateTime = EndDateTime };
     }

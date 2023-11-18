@@ -1,4 +1,5 @@
 ﻿using HorrorGameDBManager.Models;
+using System.Data;
 
 namespace HorrorGameDBManager
 {
@@ -27,42 +28,45 @@ namespace HorrorGameDBManager
             }
 
             Console.WriteLine(ADD_SUCCESS);
+            Database.Save();
         }
 
         public static void AddAcquiredAbility()
         {
-            if (Database.Players.GetAll().Count == 0)
-                throw new Exception("Невозможно создать приобретённую способность, пока в базе данных нет игроков.");
-            if (Database.Abilities.GetAll().Count == 0)
-                throw new Exception("Невозможно создать приобретённую способность, пока в базе данных нет способностей.");
+            if (!Database.Players.Entries.Any())
+                throw new ConstraintException("Невозможно создать приобретённую способность, пока в базе данных нет игроков.");
+            if (!Database.Abilities.Entries.Any())
+                throw new ConstraintException("Невозможно создать приобретённую способность, пока в базе данных нет способностей.");
 
             string playerId = InputManager.ReadPlayerId("ID игрока:");
             byte abilityId = InputManager.ReadAbilityId("ID способности:");
 
             Database.AcquiredAbilities.Add(new AcquiredAbility(playerId, abilityId));
             Console.WriteLine(ADD_SUCCESS);
+            Database.Save();
         }
 
         public static void AddArtifact()
         {
-            if (Database.RarityLevels.GetAll().Count == 0)
-                throw new Exception("Невозможно создать артефакт, пока в базе данных нет уровней редкости.");
+            if (!Database.RarityLevels.Entries.Any())
+                throw new ConstraintException("Невозможно создать артефакт, пока в базе данных нет уровней редкости.");
 
             string assetName = InputManager.ReadString("Название ассета:");
             byte rarityLevelId = InputManager.ReadRarityLevelId("ID уровня редкости:");
 
             Database.Artifacts.Add(new Artifact(assetName, rarityLevelId));
             Console.WriteLine(ADD_SUCCESS);
+            Database.Save();
         }
 
         public static void AddCollectedArtifact()
         {
-            if (Database.Players.GetAll().Count == 0)
-                throw new Exception("Невозможно создать подобранный артефакт, пока в базе данных нет игроков.");
-            if (Database.Artifacts.GetAll().Count == 0)
-                throw new Exception("Невозможно создать подобранный артефакт, пока в базе данных нет артефактов.");
-            if (Database.PlayerSessions.GetAll().Count == 0)
-                throw new Exception("Невозможно создать подобранный артефакт, пока в базе данных нет сессий игроков.");
+            if (!Database.Players.Entries.Any())
+                throw new ConstraintException("Невозможно создать подобранный артефакт, пока в базе данных нет игроков.");
+            if (!Database.Artifacts.Entries.Any())
+                throw new ConstraintException("Невозможно создать подобранный артефакт, пока в базе данных нет артефактов.");
+            if (!Database.PlayerSessions.Entries.Any())
+                throw new ConstraintException("Невозможно создать подобранный артефакт, пока в базе данных нет сессий игроков.");
 
             string playerId = InputManager.ReadPlayerId("ID игрока:");
             byte artifactId = InputManager.ReadArtifactId("ID артефакта:");
@@ -70,12 +74,13 @@ namespace HorrorGameDBManager
 
             Database.CollectedArtifacts.Add(new CollectedArtifact(playerId, artifactId, playerSessionId));
             Console.WriteLine(ADD_SUCCESS);
+            Database.Save();
         }
 
         public static void AddEntity()
         {
-            if (Database.ExperienceLevels.GetAll().Count == 0)
-                throw new Exception("Невозможно создать сущность, пока в базе данных нет уровней опыта.");
+            if (!Database.ExperienceLevels.Entries.Any())
+                throw new ConstraintException("Невозможно создать сущность, пока в базе данных нет уровней опыта.");
 
             string assetName = InputManager.ReadString("Название ассета:");
             float health = InputManager.ReadFloat("Здоровье:");
@@ -84,6 +89,7 @@ namespace HorrorGameDBManager
 
             Database.Entities.Add(new Entity(assetName, health, movementSpeed, requiredExperienceLevelId));
             Console.WriteLine(ADD_SUCCESS);
+            Database.Save();
         }
 
         public static void AddExperienceLevel()
@@ -93,6 +99,7 @@ namespace HorrorGameDBManager
 
             Database.ExperienceLevels.Add(new ExperienceLevel(number, requiredExperiencePoints));
             Console.WriteLine(ADD_SUCCESS);
+            Database.Save();
         }
 
         public static void AddGameMode()
@@ -103,24 +110,29 @@ namespace HorrorGameDBManager
 
             Database.GameModes.Add(new GameMode(assetName, playerCount, timeLimit));
             Console.WriteLine(ADD_SUCCESS);
+            Database.Save();
         }
 
         public static void AddGameSession()
         {
-            if (Database.Servers.GetAll().Count == 0)
-                throw new Exception("Невозможно создать игровую сессию, пока в базе данных нет серверов.");
-            if (Database.GameModes.GetAll().Count == 0)
-                throw new Exception("Невозможно создать игровую сессию, пока в базе данных нет игровых режимов.");
+            if (!Database.Servers.Entries.Any())
+                throw new ConstraintException("Невозможно создать игровую сессию, пока в базе данных нет серверов.");
+            if (!Database.GameModes.Entries.Any())
+                throw new ConstraintException("Невозможно создать игровую сессию, пока в базе данных нет игровых режимов.");
 
             ushort? serverId = InputManager.ReadNullableServerId("ID сервера:");
             byte? gameModeId = InputManager.ReadNullableGameModeId("ID игрового режима:");
 
             Database.GameSessions.Add(new GameSession(serverId, gameModeId));
             Console.WriteLine(ADD_SUCCESS);
+            Database.Save();
         }
 
         public static void AddPlayer()
         {
+            if (!Database.ExperienceLevels.Entries.Any())
+                throw new ConstraintException("Невозможно создать игрока, пока в базе данных нет уровней опыта.");
+
             string username = InputManager.ReadString("Никнейм:");
             string email = InputManager.ReadString("Email:");
             string password = InputManager.ReadString("Пароль:");
@@ -128,20 +140,22 @@ namespace HorrorGameDBManager
 
             Database.Players.Add(new Player(username, email, password, enableDataCollection));
             Console.WriteLine(ADD_SUCCESS);
+            Database.Save();
         }
 
         public static void AddPlayerSession()
         {
-            if (Database.GameSessions.GetAll().Count == 0)
-                throw new Exception("Невозможно создать сессию игрока, пока в базе данных нет игровых сессий.");
-            if (Database.Players.GetAll().Count == 0)
-                throw new Exception("Невозможно создать сессию игрока, пока в базе данных нет игроков.");
+            if (!Database.GameSessions.Entries.Any())
+                throw new ConstraintException("Невозможно создать сессию игрока, пока в базе данных нет игровых сессий.");
+            if (!Database.Players.Entries.Any())
+                throw new ConstraintException("Невозможно создать сессию игрока, пока в базе данных нет игроков.");
 
             ulong? gameSessionId = InputManager.ReadNullableGameSessionId("ID игровой сессии:");
             string playerId = InputManager.ReadPlayerId("ID игрока:");
 
             Database.PlayerSessions.Add(new PlayerSession(gameSessionId, playerId));
             Console.WriteLine(ADD_SUCCESS);
+            Database.Save();
         }
 
         public static void AddRarityLevel()
@@ -151,6 +165,7 @@ namespace HorrorGameDBManager
 
             Database.RarityLevels.Add(new RarityLevel(assetName, probability));
             Console.WriteLine(ADD_SUCCESS);
+            Database.Save();
         }
 
         public static void AddServer()
@@ -161,6 +176,7 @@ namespace HorrorGameDBManager
 
             Database.Servers.Add(new Server(ipAddress, playerCapacity, isActive));
             Console.WriteLine(ADD_SUCCESS);
+            Database.Save();
         }
 
         #endregion
@@ -185,6 +201,7 @@ namespace HorrorGameDBManager
             }
 
             Console.WriteLine(EDIT_SUCCESS);
+            Database.Save();
         }
 
         public static void EditArtifact(byte id)
@@ -196,6 +213,7 @@ namespace HorrorGameDBManager
 
             Database.Artifacts.Edit(id, artifact);
             Console.WriteLine(EDIT_SUCCESS);
+            Database.Save();
         }
 
         public static void EditCollectedArtifact(ulong id)
@@ -206,6 +224,7 @@ namespace HorrorGameDBManager
 
             Database.CollectedArtifacts.Edit(id, collectedArtifact);
             Console.WriteLine(EDIT_SUCCESS);
+            Database.Save();
         }
 
         public static void EditEntity(byte id)
@@ -219,6 +238,7 @@ namespace HorrorGameDBManager
 
             Database.Entities.Edit(id, entity);
             Console.WriteLine(EDIT_SUCCESS);
+            Database.Save();
         }
 
         public static void EditExperienceLevel(byte id)
@@ -229,6 +249,7 @@ namespace HorrorGameDBManager
 
             Database.ExperienceLevels.Edit(id, experienceLevel);
             Console.WriteLine(EDIT_SUCCESS);
+            Database.Save();
         }
 
         public static void EditGameMode(byte id)
@@ -241,6 +262,7 @@ namespace HorrorGameDBManager
 
             Database.GameModes.Edit(id, gameMode);
             Console.WriteLine(EDIT_SUCCESS);
+            Database.Save();
         }
 
         public static void EditGameSession(ulong id)
@@ -253,6 +275,7 @@ namespace HorrorGameDBManager
 
             Database.GameSessions.Edit(id, gameSession);
             Console.WriteLine(EDIT_SUCCESS);
+            Database.Save();
         }
 
         public static void EditPlayer(string id)
@@ -270,6 +293,7 @@ namespace HorrorGameDBManager
 
             Database.Players.Edit(id, player);
             Console.WriteLine(EDIT_SUCCESS);
+            Database.Save();
         }
 
         public static void EditPlayerSession(ulong id)
@@ -289,6 +313,7 @@ namespace HorrorGameDBManager
 
             Database.PlayerSessions.Edit(id, playerSession);
             Console.WriteLine(EDIT_SUCCESS);
+            Database.Save();
         }
 
         public static void EditRarityLevel(byte id)
@@ -300,6 +325,7 @@ namespace HorrorGameDBManager
 
             Database.RarityLevels.Edit(id, rarityLevel);
             Console.WriteLine(EDIT_SUCCESS);
+            Database.Save();
         }
 
         public static void EditServer(ushort id)
@@ -313,6 +339,7 @@ namespace HorrorGameDBManager
 
             Database.Servers.Edit(id, server);
             Console.WriteLine(EDIT_SUCCESS);
+            Database.Save();
         }
 
         #endregion
@@ -336,6 +363,7 @@ namespace HorrorGameDBManager
 
             Database.Abilities.Remove(id);
             Console.WriteLine(REMOVE_SUCCESS);
+            Database.Save();
         }
 
         public static void RemoveAcquiredAbility(ulong id, bool force = false)
@@ -354,6 +382,7 @@ namespace HorrorGameDBManager
 
             Database.AcquiredAbilities.Remove(id);
             Console.WriteLine(REMOVE_SUCCESS);
+            Database.Save();
         }
 
         public static void RemoveArtifact(byte id, bool force = false)
@@ -371,6 +400,7 @@ namespace HorrorGameDBManager
 
             Database.Artifacts.Remove(id);
             Console.WriteLine(REMOVE_SUCCESS);
+            Database.Save();
         }
 
         public static void RemoveCollectedArtifact(ulong id, bool force = false)
@@ -383,6 +413,7 @@ namespace HorrorGameDBManager
 
             Database.CollectedArtifacts.Remove(id);
             Console.WriteLine(REMOVE_SUCCESS);
+            Database.Save();
         }
 
         public static void RemoveEntity(byte id, bool force = false)
@@ -403,6 +434,7 @@ namespace HorrorGameDBManager
 
             Database.Entities.Remove(id);
             Console.WriteLine(REMOVE_SUCCESS);
+            Database.Save();
         }
 
         public static void RemoveExperienceLevel(byte id, bool force = false)
@@ -415,10 +447,10 @@ namespace HorrorGameDBManager
 
             var experienceLevel = Database.ExperienceLevels.Get(id);
 
-            var experienceLevelIds = Database.ExperienceLevels.GetAll().Select(experienceLevel => experienceLevel.Id).ToList();
+            var experienceLevelIds = Database.ExperienceLevels.Entries.Select(experienceLevel => experienceLevel.Id).ToList();
             int index = experienceLevelIds.IndexOf(id);
-            byte nextId = (byte) Database.ExperienceLevels.GetAll().ElementAt(index + 1).Id;
-            byte previousId = (byte) Database.ExperienceLevels.GetAll().ElementAt(index - 1).Id;
+            byte nextId = (byte) Database.ExperienceLevels.Entries.ElementAt(index + 1).Id;
+            byte previousId = (byte) Database.ExperienceLevels.Entries.ElementAt(index - 1).Id;
 
             foreach (var entity in experienceLevel.RequiringEntities)
             {
@@ -434,6 +466,7 @@ namespace HorrorGameDBManager
 
             Database.ExperienceLevels.Remove(id);
             Console.WriteLine(REMOVE_SUCCESS);
+            Database.Save();
         }
 
         public static void RemoveGameMode(byte id, bool force = false)
@@ -454,6 +487,7 @@ namespace HorrorGameDBManager
 
             Database.GameModes.Remove(id);
             Console.WriteLine(REMOVE_SUCCESS);
+            Database.Save();
         }
 
         public static void RemoveGameSession(ulong id, bool force = false)
@@ -474,6 +508,7 @@ namespace HorrorGameDBManager
 
             Database.GameSessions.Remove(id);
             Console.WriteLine(REMOVE_SUCCESS);
+            Database.Save();
         }
 
         public static void RemovePlayer(string id, bool force = false)
@@ -497,6 +532,7 @@ namespace HorrorGameDBManager
 
             Database.Players.Remove(id);
             Console.WriteLine(REMOVE_SUCCESS);
+            Database.Save();
         }
 
         public static void RemovePlayerSession(ulong id, bool force = false)
@@ -517,6 +553,7 @@ namespace HorrorGameDBManager
 
             Database.PlayerSessions.Remove(id);
             Console.WriteLine(REMOVE_SUCCESS);
+            Database.Save();
         }
 
         public static void RemoveRarityLevel(byte id, bool force = false)
@@ -529,9 +566,9 @@ namespace HorrorGameDBManager
 
             var rarityLevel = Database.RarityLevels.Get(id);
 
-            var rarityLevelIds = Database.RarityLevels.GetAll().Select(rarityLevel => rarityLevel.Id).ToList();
+            var rarityLevelIds = Database.RarityLevels.Entries.Select(rarityLevel => rarityLevel.Id).ToList();
             int index = rarityLevelIds.IndexOf(id);
-            byte nextId = (byte) Database.RarityLevels.GetAll().ElementAt(index + 1).Id;
+            byte nextId = (byte) Database.RarityLevels.Entries.ElementAt(index + 1).Id;
 
             foreach (var artifact in rarityLevel.Artifacts)
             {
@@ -541,6 +578,7 @@ namespace HorrorGameDBManager
 
             Database.RarityLevels.Remove(id);
             Console.WriteLine(REMOVE_SUCCESS);
+            Database.Save();
         }
 
         public static void RemoveServer(ushort id, bool force = false)
@@ -561,6 +599,7 @@ namespace HorrorGameDBManager
 
             Database.Servers.Remove(id);
             Console.WriteLine(REMOVE_SUCCESS);
+            Database.Save();
         }
 
         #endregion

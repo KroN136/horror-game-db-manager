@@ -5,13 +5,14 @@ namespace HorrorGameDBManager
     internal class Table<T> where T : Model
     {
         public string Name { get; }
-        private static List<string> names = new();
+        private static readonly List<string> names = new();
 
-        protected List<T> entries = new();
-
-        public List<T> GetAll() => new(entries);
-        public void SetAll(List<T> entries) =>
-            this.entries = entries ?? throw new ArgumentNullException(nameof(entries));
+        private List<T> entries = new();
+        public List<T> Entries
+        {
+            get => new(entries);
+            set => entries = value ?? throw new ArgumentNullException(nameof(value));
+        }
 
         public Table(string name)
         {

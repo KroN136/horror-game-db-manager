@@ -1,4 +1,5 @@
 ﻿using HorrorGameDBManager.Models.Base;
+using System.Text.Json.Serialization;
 
 namespace HorrorGameDBManager.Models
 {
@@ -25,8 +26,21 @@ namespace HorrorGameDBManager.Models
                 throw new ArgumentException($"Уровень редкости {rarityLevelId} не существует.");
         }
 
+        [JsonConstructor]
+        public Artifact(object id, string assetName, byte rarityLevelId)
+        {
+            id = byte.Parse(id.ToString()!);
+            Id = id;
+            existingIds.Add(Id);
+
+            AssetName = assetName;
+            RarityLevelId = rarityLevelId;
+        }
+
+        [JsonIgnore]
         public RarityLevel RarityLevel => Database.RarityLevels.Get(RarityLevelId);
-        public IEnumerable<CollectedArtifact> CollectedArtifacts => Database.CollectedArtifacts.GetAll().Where(collectedArtifact => collectedArtifact.ArtifactId.Equals(Id));
+        [JsonIgnore]
+        public IEnumerable<CollectedArtifact> CollectedArtifacts => Database.CollectedArtifacts.Entries.Where(collectedArtifact => collectedArtifact.ArtifactId.Equals(Id));
 
         public override Artifact Clone() => new(AssetName, RarityLevelId, false) { Id = Id };
     }

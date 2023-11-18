@@ -1,4 +1,5 @@
 ﻿using HorrorGameDBManager.Models.Base;
+using System.Text.Json.Serialization;
 
 namespace HorrorGameDBManager.Models
 {
@@ -38,8 +39,23 @@ namespace HorrorGameDBManager.Models
             PlayerSessionId = playerSessionId;
         }
 
+        [JsonConstructor]
+        public CollectedArtifact(object id, string playerId, byte artifactId, ulong? playerSessionId)
+        {
+            id = ulong.Parse(id.ToString()!);
+            Id = id;
+            existingIds.Add(Id);
+
+            PlayerId = playerId;
+            ArtifactId = artifactId;
+            PlayerSessionId = playerSessionId;
+        }
+
+        [JsonIgnore]
         public Player Player => Database.Players.Get(PlayerId);
+        [JsonIgnore]
         public Artifact Artifact => Database.Artifacts.Get(ArtifactId);
+        [JsonIgnore]
         public PlayerSession? PlayerSession => PlayerSessionId.HasValue ? Database.PlayerSessions.Get(PlayerSessionId) : null;
 
         public override CollectedArtifact Clone() => new(PlayerId, ArtifactId, PlayerSessionId, false) { Id = Id };

@@ -1,4 +1,5 @@
 ﻿using HorrorGameDBManager.Models.Base;
+using System.Text.Json.Serialization;
 
 namespace HorrorGameDBManager.Models
 {
@@ -25,7 +26,21 @@ namespace HorrorGameDBManager.Models
             PlayerCount = 0;
         }
 
-        public IEnumerable<GameSession> GameSessions => Database.GameSessions.GetAll().Where(gameSession => gameSession.ServerId.HasValue && gameSession.ServerId.Value.Equals(Id));
+        [JsonConstructor]
+        public Server(object id, string ipAddress, ushort playerCapacity, bool isActive, ushort playerCount)
+        {
+            id = ushort.Parse(id.ToString()!);
+            Id = id;
+            existingIds.Add(Id);
+
+            IpAddress = ipAddress;
+            PlayerCapacity = playerCapacity;
+            IsActive = isActive;
+            PlayerCount = playerCount;
+        }
+
+        [JsonIgnore]
+        public IEnumerable<GameSession> GameSessions => Database.GameSessions.Entries.Where(gameSession => gameSession.ServerId.HasValue && gameSession.ServerId.Value.Equals(Id));
 
         public override Server Clone() => new(IpAddress, PlayerCapacity, IsActive, false) { Id = Id, PlayerCount = PlayerCount };
     }

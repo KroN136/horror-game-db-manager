@@ -1,4 +1,5 @@
 ﻿using HorrorGameDBManager.Models.Base;
+using System.Text.Json.Serialization;
 
 namespace HorrorGameDBManager.Models
 {
@@ -23,7 +24,20 @@ namespace HorrorGameDBManager.Models
             TimeLimit = timeLimit;
         }
 
-        public IEnumerable<GameSession> GameSessions => Database.GameSessions.GetAll().Where(gameSession => gameSession.GameModeId.HasValue && gameSession.GameModeId.Value.Equals(Id));
+        [JsonConstructor]
+        public GameMode(object id, string assetName, byte playerCount, float? timeLimit)
+        {
+            id = byte.Parse(id.ToString()!);
+            Id = id;
+            existingIds.Add(Id);
+
+            AssetName = assetName;
+            PlayerCount = playerCount;
+            TimeLimit = timeLimit;
+        }
+
+        [JsonIgnore]
+        public IEnumerable<GameSession> GameSessions => Database.GameSessions.Entries.Where(gameSession => gameSession.GameModeId.HasValue && gameSession.GameModeId.Value.Equals(Id));
 
         public override GameMode Clone() => new(AssetName, PlayerCount, TimeLimit, false) { Id = Id };
     }

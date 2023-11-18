@@ -1,4 +1,5 @@
 ﻿using HorrorGameDBManager.Models;
+using System.Data;
 
 namespace HorrorGameDBManager
 {
@@ -73,45 +74,45 @@ namespace HorrorGameDBManager
         {
             if (tableName.Equals("*"))
             {
-                TablePrinter.PrintAbilities(Database.Abilities.GetAll());
-                TablePrinter.PrintAcquiredAbilities(Database.AcquiredAbilities.GetAll());
-                TablePrinter.PrintArtifacts(Database.Artifacts.GetAll());
-                TablePrinter.PrintCollectedArtifacts(Database.CollectedArtifacts.GetAll());
-                TablePrinter.PrintEntities(Database.Entities.GetAll());
-                TablePrinter.PrintExperienceLevels(Database.ExperienceLevels.GetAll());
-                TablePrinter.PrintGameModes(Database.GameModes.GetAll());
-                TablePrinter.PrintGameSessions(Database.GameSessions.GetAll());
-                TablePrinter.PrintPlayers(Database.Players.GetAll());
-                TablePrinter.PrintPlayerSessions(Database.PlayerSessions.GetAll());
-                TablePrinter.PrintRarityLevels(Database.RarityLevels.GetAll());
-                TablePrinter.PrintServers(Database.Servers.GetAll());
+                TablePrinter.PrintAbilities(Database.Abilities.Entries);
+                TablePrinter.PrintAcquiredAbilities(Database.AcquiredAbilities.Entries);
+                TablePrinter.PrintArtifacts(Database.Artifacts.Entries);
+                TablePrinter.PrintCollectedArtifacts(Database.CollectedArtifacts.Entries);
+                TablePrinter.PrintEntities(Database.Entities.Entries);
+                TablePrinter.PrintExperienceLevels(Database.ExperienceLevels.Entries);
+                TablePrinter.PrintGameModes(Database.GameModes.Entries);
+                TablePrinter.PrintGameSessions(Database.GameSessions.Entries);
+                TablePrinter.PrintPlayers(Database.Players.Entries);
+                TablePrinter.PrintPlayerSessions(Database.PlayerSessions.Entries);
+                TablePrinter.PrintRarityLevels(Database.RarityLevels.Entries);
+                TablePrinter.PrintServers(Database.Servers.Entries);
                 return;
             }
 
             if (tableName.Equals(Database.Abilities.Name))
-                TablePrinter.PrintAbilities(Database.Abilities.GetAll());
+                TablePrinter.PrintAbilities(Database.Abilities.Entries);
             else if (tableName.Equals(Database.AcquiredAbilities.Name))
-                TablePrinter.PrintAcquiredAbilities(Database.AcquiredAbilities.GetAll());
+                TablePrinter.PrintAcquiredAbilities(Database.AcquiredAbilities.Entries);
             else if (tableName.Equals(Database.Artifacts.Name))
-                TablePrinter.PrintArtifacts(Database.Artifacts.GetAll());
+                TablePrinter.PrintArtifacts(Database.Artifacts.Entries);
             else if (tableName.Equals(Database.CollectedArtifacts.Name))
-                TablePrinter.PrintCollectedArtifacts(Database.CollectedArtifacts.GetAll());
+                TablePrinter.PrintCollectedArtifacts(Database.CollectedArtifacts.Entries);
             else if (tableName.Equals(Database.Entities.Name))
-                TablePrinter.PrintEntities(Database.Entities.GetAll());
+                TablePrinter.PrintEntities(Database.Entities.Entries);
             else if (tableName.Equals(Database.ExperienceLevels.Name))
-                TablePrinter.PrintExperienceLevels(Database.ExperienceLevels.GetAll());
+                TablePrinter.PrintExperienceLevels(Database.ExperienceLevels.Entries);
             else if (tableName.Equals(Database.GameModes.Name))
-                TablePrinter.PrintGameModes(Database.GameModes.GetAll());
+                TablePrinter.PrintGameModes(Database.GameModes.Entries);
             else if (tableName.Equals(Database.GameSessions.Name))
-                TablePrinter.PrintGameSessions(Database.GameSessions.GetAll());
+                TablePrinter.PrintGameSessions(Database.GameSessions.Entries);
             else if (tableName.Equals(Database.Players.Name))
-                TablePrinter.PrintPlayers(Database.Players.GetAll());
+                TablePrinter.PrintPlayers(Database.Players.Entries);
             else if (tableName.Equals(Database.PlayerSessions.Name))
-                TablePrinter.PrintPlayerSessions(Database.PlayerSessions.GetAll());
+                TablePrinter.PrintPlayerSessions(Database.PlayerSessions.Entries);
             else if (tableName.Equals(Database.RarityLevels.Name))
-                TablePrinter.PrintRarityLevels(Database.RarityLevels.GetAll());
+                TablePrinter.PrintRarityLevels(Database.RarityLevels.Entries);
             else if (tableName.Equals(Database.Servers.Name))
-                TablePrinter.PrintServers(Database.Servers.GetAll());
+                TablePrinter.PrintServers(Database.Servers.Entries);
             else
                 throw new ArgumentException($"Таблица {tableName} не существует.");
         }
@@ -181,7 +182,7 @@ namespace HorrorGameDBManager
             if (tableName.Equals(Database.Abilities.Name))
                 EntryManager.EditAbility(byte.Parse(id));
             else if (tableName.Equals(Database.AcquiredAbilities.Name))
-                throw new ArgumentException($"Таблица {Database.AcquiredAbilities.Name} не является редактируемой.");
+                throw new ArgumentException($"Таблица {tableName} не является редактируемой.");
             else if (tableName.Equals(Database.Artifacts.Name))
                 EntryManager.EditArtifact(byte.Parse(id));
             else if (tableName.Equals(Database.CollectedArtifacts.Name))
@@ -312,12 +313,18 @@ namespace HorrorGameDBManager
             });
             */
 
+            Database.Load();
+
+            Console.WriteLine(string.Join("", Enumerable.Repeat("-", 65)));
             Console.WriteLine("Добро пожаловать в программу управления базой данных хоррор-игры!");
-            Console.WriteLine("Введите help для вывода списка доступных команд.");
+            Console.WriteLine("Введите \"help\" для вывода списка доступных команд.");
+            Console.WriteLine(string.Join("", Enumerable.Repeat("-", 65)));
             Console.WriteLine();
 
             while (loop)
                 ExecuteUserCommand();
+
+            Database.Save();
         }
 
         private static void ExecuteUserCommand()
@@ -329,7 +336,7 @@ namespace HorrorGameDBManager
             try
             {
                 if (string.IsNullOrEmpty(input))
-                    throw new ArgumentException(EMPTY_COMMAND_MESSAGE);
+                    throw new FormatException(EMPTY_COMMAND_MESSAGE);
 
                 string[] parts = input.Split(' ', StringSplitOptions.RemoveEmptyEntries);
                 string command = parts[0];
@@ -339,7 +346,7 @@ namespace HorrorGameDBManager
                 {
                     case "help":
                         if (args.Length > 1)
-                            throw new ArgumentException(WRONG_ARGUMENT_COUNT_MESSAGE);
+                            throw new FormatException(WRONG_ARGUMENT_COUNT_MESSAGE);
                         else if (args.Length == 1)
                             Help(args[0]);
                         else
@@ -347,13 +354,13 @@ namespace HorrorGameDBManager
                         break;
                     case "tables":
                         if (args.Length > 0)
-                            throw new ArgumentException(WRONG_ARGUMENT_COUNT_MESSAGE);
+                            throw new FormatException(WRONG_ARGUMENT_COUNT_MESSAGE);
                         else
                             Tables();
                         break;
                     case "view":
                         if (args.Length == 0 || args.Length > 2)
-                            throw new ArgumentException(WRONG_ARGUMENT_COUNT_MESSAGE);
+                            throw new FormatException(WRONG_ARGUMENT_COUNT_MESSAGE);
                         else if (args.Length == 2)
                             View(args[0], args[1]);
                         else
@@ -361,19 +368,19 @@ namespace HorrorGameDBManager
                         break;
                     case "add":
                         if (args.Length != 1)
-                            throw new ArgumentException(WRONG_ARGUMENT_COUNT_MESSAGE);
+                            throw new FormatException(WRONG_ARGUMENT_COUNT_MESSAGE);
                         else
                             Add(args[0]);
                         break;
                     case "edit":
                         if (args.Length != 2)
-                            throw new ArgumentException(WRONG_ARGUMENT_COUNT_MESSAGE);
+                            throw new FormatException(WRONG_ARGUMENT_COUNT_MESSAGE);
                         else
                             Edit(args[0], args[1]);
                         break;
                     case "remove":
                         if (args.Length != 2)
-                            throw new ArgumentException(WRONG_ARGUMENT_COUNT_MESSAGE);
+                            throw new FormatException(WRONG_ARGUMENT_COUNT_MESSAGE);
                         else
                             Remove(args[0], args[1]);
                         break;
@@ -381,12 +388,24 @@ namespace HorrorGameDBManager
                         Exit();
                         break;
                     default:
-                        throw new ArgumentException(UNKNOWN_COMMAND_MESSAGE);
+                        throw new FormatException(UNKNOWN_COMMAND_MESSAGE);
                 }
             }
             catch (ArgumentException ex)
             {
                 Console.WriteLine(ex.Message);
+            }
+            catch (FormatException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            catch (ConstraintException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Произошла непредвиденная ошибка.\n{ex.Message}\n{ex.StackTrace}");
             }
 
             Console.WriteLine();

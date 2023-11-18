@@ -1,4 +1,5 @@
 ﻿using HorrorGameDBManager.Models.Base;
+using System.Text.Json.Serialization;
 
 namespace HorrorGameDBManager.Models
 {
@@ -21,8 +22,21 @@ namespace HorrorGameDBManager.Models
             RequiredExperiencePoints = requiredExperiencePoints;
         }
 
-        public IEnumerable<Entity> RequiringEntities => Database.Entities.GetAll().Where(entity => entity.RequiredExperienceLevelId.Equals(Id));
-        public IEnumerable<Player> Players => Database.Players.GetAll().Where(player => player.ExperienceLevelId.Equals(Id));
+        [JsonConstructor]
+        public ExperienceLevel(object id, byte number, ushort requiredExperiencePoints)
+        {
+            id = byte.Parse(id.ToString()!);
+            Id = id;
+            existingIds.Add(Id);
+
+            Number = number;
+            RequiredExperiencePoints = requiredExperiencePoints;
+        }
+
+        [JsonIgnore]
+        public IEnumerable<Entity> RequiringEntities => Database.Entities.Entries.Where(entity => entity.RequiredExperienceLevelId.Equals(Id));
+        [JsonIgnore]
+        public IEnumerable<Player> Players => Database.Players.Entries.Where(player => player.ExperienceLevelId.Equals(Id));
 
         public override ExperienceLevel Clone() => new(Number, RequiredExperiencePoints, false) { Id = Id };
     }

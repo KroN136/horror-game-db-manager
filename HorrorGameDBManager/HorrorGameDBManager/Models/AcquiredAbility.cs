@@ -1,4 +1,5 @@
 ﻿using HorrorGameDBManager.Models.Base;
+using System.Text.Json.Serialization;
 
 namespace HorrorGameDBManager.Models
 {
@@ -28,7 +29,20 @@ namespace HorrorGameDBManager.Models
                 throw new ArgumentException($"Способность {abilityId} не существует.");
         }
 
+        [JsonConstructor]
+        public AcquiredAbility(object id, string playerId, byte abilityId)
+        {
+            id = ulong.Parse(id.ToString()!);
+            Id = id;
+            existingIds.Add(Id);
+
+            PlayerId = playerId;
+            AbilityId = abilityId;
+        }
+
+        [JsonIgnore]
         public Player Player => Database.Players.Get(PlayerId);
+        [JsonIgnore]
         public Ability Ability => Database.Abilities.Get(AbilityId);
 
         public override AcquiredAbility Clone() => new(PlayerId, AbilityId, false) { Id = Id };

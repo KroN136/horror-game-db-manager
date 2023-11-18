@@ -21,6 +21,8 @@ namespace HorrorGameDBManager.Models
             Probability = probability;
         }
 
+        public IEnumerable<Artifact> Artifacts => Database.Artifacts.GetAll().Where(artifact => artifact.RarityLevelId.Equals(Id));
+
         public override RarityLevel Clone() => new(AssetName, Probability, false) { Id = Id };
     }
 }

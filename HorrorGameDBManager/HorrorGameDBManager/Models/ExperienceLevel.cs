@@ -21,6 +21,9 @@ namespace HorrorGameDBManager.Models
             RequiredExperiencePoints = requiredExperiencePoints;
         }
 
+        public IEnumerable<Entity> RequiringEntities => Database.Entities.GetAll().Where(entity => entity.RequiredExperienceLevelId.Equals(Id));
+        public IEnumerable<Player> Players => Database.Players.GetAll().Where(player => player.ExperienceLevelId.Equals(Id));
+
         public override ExperienceLevel Clone() => new(Number, RequiredExperiencePoints, false) { Id = Id };
     }
 }

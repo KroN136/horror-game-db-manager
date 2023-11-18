@@ -28,6 +28,9 @@ namespace HorrorGameDBManager.Models
                 throw new ArgumentException($"Способность {abilityId} не существует.");
         }
 
+        public Player Player => Database.Players.Get(PlayerId);
+        public Ability Ability => Database.Abilities.Get(AbilityId);
+
         public override AcquiredAbility Clone() => new(PlayerId, AbilityId, false) { Id = Id };
     }
 }

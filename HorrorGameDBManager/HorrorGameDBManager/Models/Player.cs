@@ -35,6 +35,11 @@ namespace HorrorGameDBManager.Models
             EnableDataCollection = enableDataCollection;
         }
 
+        public ExperienceLevel ExperienceLevel => Database.ExperienceLevels.Get(ExperienceLevelId);
+        public IEnumerable<AcquiredAbility> AcquiredAbilities => Database.AcquiredAbilities.GetAll().Where(acquiredAbility => acquiredAbility.PlayerId.Equals(Id));
+        public IEnumerable<CollectedArtifact> CollectedArtifacts => Database.CollectedArtifacts.GetAll().Where(collectedArtifact => collectedArtifact.PlayerId.Equals(Id));
+        public IEnumerable<PlayerSession> PlayerSessions => Database.PlayerSessions.GetAll().Where(playerSession => playerSession.PlayerId.Equals(Id));
+
         public override Player Clone() => new(Username, Email, Password, EnableDataCollection, false) { Id = Id, RegistrationDateTime = RegistrationDateTime, ExperienceLevelId = ExperienceLevelId, ExperiencePoints = ExperiencePoints, AbilityPoints = AbilityPoints, IsOnline = IsOnline };
     }
 }

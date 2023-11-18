@@ -33,6 +33,10 @@ namespace HorrorGameDBManager.Models
             EndDateTime = null;
         }
 
+        public Server? Server => ServerId.HasValue ? Database.Servers.Get(ServerId) : null;
+        public GameMode? GameMode => GameModeId.HasValue ? Database.GameModes.Get(GameModeId) : null;
+        public IEnumerable<PlayerSession> PlayerSessions => Database.PlayerSessions.GetAll().Where(playerSession => playerSession.GameSessionId.Equals(Id));
+
         public override GameSession Clone() => new(ServerId, GameModeId, false) { Id = Id, StartDateTime = StartDateTime, EndDateTime = EndDateTime };
     }
 }

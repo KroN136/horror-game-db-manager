@@ -25,6 +25,9 @@ namespace HorrorGameDBManager.Models
                 throw new ArgumentException($"Уровень редкости {rarityLevelId} не существует.");
         }
 
+        public RarityLevel RarityLevel => Database.RarityLevels.Get(RarityLevelId);
+        public IEnumerable<CollectedArtifact> CollectedArtifacts => Database.CollectedArtifacts.GetAll().Where(collectedArtifact => collectedArtifact.ArtifactId.Equals(Id));
+
         public override Artifact Clone() => new(AssetName, RarityLevelId, false) { Id = Id };
     }
 }

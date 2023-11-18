@@ -371,7 +371,7 @@ namespace HorrorGameDBManager
                     entry.IsWon.HasValue ? entry.IsWon.Value ? "да" : "нет" : "-",
                     entry.TimeAlive.HasValue ? $"{entry.TimeAlive.Value} сек" : "-",
                     entry.PlayedAsEntity.HasValue ? entry.PlayedAsEntity.Value ? "да" : "нет" : "-",
-                    entry.EntityId.HasValue ? entry.EntityId.Value.ToString() : "-",
+                    entry.UsedEntityId.HasValue ? entry.UsedEntityId.Value.ToString() : "-",
                 };
 
                 entryDataList.Add(entryData);
@@ -386,7 +386,7 @@ namespace HorrorGameDBManager
                 SetMaxLength("Выиграна", MaxColumnLength),
                 SetMaxLength("Время жизни", MaxColumnLength),
                 SetMaxLength("Использована сущность", MaxColumnLength),
-                SetMaxLength("ID сущности", MaxColumnLength)
+                SetMaxLength("ID использованной сущности", MaxColumnLength)
             };
 
             PrintTable(entryDataList, headers, "сессии игроков", Database.PlayerSessions.Name);

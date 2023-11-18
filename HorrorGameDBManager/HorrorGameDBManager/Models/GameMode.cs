@@ -23,6 +23,8 @@ namespace HorrorGameDBManager.Models
             TimeLimit = timeLimit;
         }
 
+        public IEnumerable<GameSession> GameSessions => Database.GameSessions.GetAll().Where(gameSession => gameSession.GameModeId.HasValue && gameSession.GameModeId.Value.Equals(Id));
+
         public override GameMode Clone() => new(AssetName, PlayerCount, TimeLimit, false) { Id = Id };
     }
 }

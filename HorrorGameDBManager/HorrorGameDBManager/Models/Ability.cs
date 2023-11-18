@@ -19,6 +19,8 @@ namespace HorrorGameDBManager.Models
             AssetName = assetName;
         }
 
+        public IEnumerable<AcquiredAbility> AcquiredAbilities => Database.AcquiredAbilities.GetAll().Where(acquiredAbility => acquiredAbility.AbilityId.Equals(Id));
+
         public override Ability Clone() => new(AssetName, false) { Id = Id };
     }
 }

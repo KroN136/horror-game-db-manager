@@ -38,6 +38,10 @@ namespace HorrorGameDBManager.Models
             PlayerSessionId = playerSessionId;
         }
 
+        public Player Player => Database.Players.Get(PlayerId);
+        public Artifact Artifact => Database.Artifacts.Get(ArtifactId);
+        public PlayerSession PlayerSession => Database.PlayerSessions.Get(PlayerSessionId);
+
         public override CollectedArtifact Clone() => new(PlayerId, ArtifactId, PlayerSessionId, false) { Id = Id };
     }
 }

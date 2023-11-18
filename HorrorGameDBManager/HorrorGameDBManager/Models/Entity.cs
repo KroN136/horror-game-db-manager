@@ -29,6 +29,9 @@ namespace HorrorGameDBManager.Models
                 throw new ArgumentException($"Уровень опыта {requiredExperienceLevelId} не существует.");
         }
 
+        public ExperienceLevel RequiredExperienceLevel => Database.ExperienceLevels.Get(RequiredExperienceLevelId);
+        public IEnumerable<PlayerSession> PlayerSessions => Database.PlayerSessions.GetAll().Where(playerSession => playerSession.UsedEntityId.HasValue && playerSession.UsedEntityId.Value.Equals(Id));
+
         public override Entity Clone() => new(AssetName, Health, MovementSpeed, RequiredExperienceLevelId, false) { Id = Id };
     }
 }

@@ -12,7 +12,7 @@ namespace HorrorGameDBManager.Models
         public bool? IsWon { get; set; }
         public float? TimeAlive { get; set; }
         public bool? PlayedAsEntity { get; set; }
-        public byte? EntityId { get; set; }
+        public byte? UsedEntityId { get; set; }
 
         public PlayerSession(ulong gameSessionId, string playerId, bool generateId = true)
         {
@@ -47,9 +47,14 @@ namespace HorrorGameDBManager.Models
                 PlayedAsEntity = null;
             }
 
-            EntityId = null;
+            UsedEntityId = null;
         }
 
-        public override PlayerSession Clone() => new(GameSessionId, PlayerId, false) { Id = Id, IsFinished = IsFinished, IsWon = IsWon, TimeAlive = TimeAlive, PlayedAsEntity = PlayedAsEntity, EntityId = EntityId };
+        public GameSession GameSession => Database.GameSessions.Get(GameSessionId);
+        public Player Player => Database.Players.Get(PlayerId);
+        public Entity? UsedEntity => UsedEntityId.HasValue ? Database.Entities.Get(UsedEntityId) : null;
+        public IEnumerable<CollectedArtifact> CollectedArtifacts => Database.CollectedArtifacts.GetAll().Where(collectedArtifact => collectedArtifact.PlayerSessionId.Equals(Id));
+
+        public override PlayerSession Clone() => new(GameSessionId, PlayerId, false) { Id = Id, IsFinished = IsFinished, IsWon = IsWon, TimeAlive = TimeAlive, PlayedAsEntity = PlayedAsEntity, UsedEntityId = UsedEntityId };
     }
 }

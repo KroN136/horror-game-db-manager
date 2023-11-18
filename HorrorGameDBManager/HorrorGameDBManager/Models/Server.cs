@@ -25,6 +25,8 @@ namespace HorrorGameDBManager.Models
             PlayerCount = 0;
         }
 
+        public IEnumerable<GameSession> GameSessions => Database.GameSessions.GetAll().Where(gameSession => gameSession.ServerId.HasValue && gameSession.ServerId.Value.Equals(Id));
+
         public override Server Clone() => new(IpAddress, PlayerCapacity, IsActive, false) { Id = Id, PlayerCount = PlayerCount };
     }
 }

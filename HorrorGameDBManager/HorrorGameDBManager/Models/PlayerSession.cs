@@ -6,7 +6,7 @@ namespace HorrorGameDBManager.Models
     {
         private static readonly List<object> existingIds = new();
 
-        public ulong GameSessionId { get; }
+        public ulong? GameSessionId { get; set; }
         public string PlayerId { get; }
         public bool? IsFinished { get; set; }
         public bool? IsWon { get; set; }
@@ -14,7 +14,7 @@ namespace HorrorGameDBManager.Models
         public bool? PlayedAsEntity { get; set; }
         public byte? UsedEntityId { get; set; }
 
-        public PlayerSession(ulong gameSessionId, string playerId, bool generateId = true)
+        public PlayerSession(ulong? gameSessionId, string playerId, bool generateId = true)
         {
             if (generateId)
             {
@@ -22,7 +22,7 @@ namespace HorrorGameDBManager.Models
                 existingIds.Add(Id);
             }
 
-            if (Database.GameSessions.Exists(gameSessionId))
+            if (gameSessionId.HasValue == false || Database.GameSessions.Exists(gameSessionId))
                 GameSessionId = gameSessionId;
             else
                 throw new ArgumentException($"Игровая сессия {gameSessionId} не существует.");
@@ -50,7 +50,7 @@ namespace HorrorGameDBManager.Models
             UsedEntityId = null;
         }
 
-        public GameSession GameSession => Database.GameSessions.Get(GameSessionId);
+        public GameSession? GameSession => GameSessionId.HasValue ? Database.GameSessions.Get(GameSessionId) : null;
         public Player Player => Database.Players.Get(PlayerId);
         public Entity? UsedEntity => UsedEntityId.HasValue ? Database.Entities.Get(UsedEntityId) : null;
         public IEnumerable<CollectedArtifact> CollectedArtifacts => Database.CollectedArtifacts.GetAll().Where(collectedArtifact => collectedArtifact.PlayerSessionId.Equals(Id));

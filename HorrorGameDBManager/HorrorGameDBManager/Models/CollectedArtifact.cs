@@ -8,9 +8,9 @@ namespace HorrorGameDBManager.Models
 
         public string PlayerId { get; }
         public byte ArtifactId { get; }
-        public ulong PlayerSessionId { get; }
+        public ulong? PlayerSessionId { get; set; }
 
-        public CollectedArtifact(string playerId, byte artifactId, ulong playerSessionId, bool generateId = true)
+        public CollectedArtifact(string playerId, byte artifactId, ulong? playerSessionId, bool generateId = true)
         {
             if (generateId)
             {
@@ -28,7 +28,7 @@ namespace HorrorGameDBManager.Models
             else
                 throw new ArgumentException($"Артефакт {artifactId} не существует.");
 
-            if (Database.GameSessions.Exists(playerSessionId))
+            if (playerSessionId.HasValue == false || Database.GameSessions.Exists(playerSessionId))
                 PlayerSessionId = playerSessionId;
             else
                 throw new ArgumentException($"Сессия игрока {playerSessionId} не существует.");
@@ -40,7 +40,7 @@ namespace HorrorGameDBManager.Models
 
         public Player Player => Database.Players.Get(PlayerId);
         public Artifact Artifact => Database.Artifacts.Get(ArtifactId);
-        public PlayerSession PlayerSession => Database.PlayerSessions.Get(PlayerSessionId);
+        public PlayerSession? PlayerSession => PlayerSessionId.HasValue ? Database.PlayerSessions.Get(PlayerSessionId) : null;
 
         public override CollectedArtifact Clone() => new(PlayerId, ArtifactId, PlayerSessionId, false) { Id = Id };
     }

@@ -173,7 +173,7 @@ namespace HorrorGameDBManager
                     entry.Id.ToString()!,
                     entry.PlayerId,
                     entry.ArtifactId.ToString(),
-                    entry.PlayerSessionId.ToString()
+                    entry.PlayerSessionId.HasValue ? entry.PlayerSessionId.Value.ToString() : "-"
                 };
 
                 entryDataList.Add(entryData);
@@ -365,7 +365,7 @@ namespace HorrorGameDBManager
                 string[] entryData = new string[]
                 {
                     entry.Id.ToString()!,
-                    entry.GameSessionId.ToString(),
+                    entry.GameSessionId.HasValue ? entry.GameSessionId.Value.ToString() : "-",
                     entry.PlayerId,
                     entry.IsFinished.HasValue ? entry.IsFinished.Value ? "да" : "нет" : "-",
                     entry.IsWon.HasValue ? entry.IsWon.Value ? "да" : "нет" : "-",

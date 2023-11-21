@@ -35,6 +35,7 @@ namespace HorrorGameDBManager
                     Console.WriteLine("tables - просмотр списка всех таблиц");
                     break;
                 case "view":
+                    Console.WriteLine("view * - просмотр всех записей во всех таблицах");
                     Console.WriteLine("view <table> [id] - просмотр всех записей в таблице table / просмотр записи с идентификатором id в таблице table");
                     break;
                 case "add":
@@ -243,76 +244,6 @@ namespace HorrorGameDBManager
 
         public static void Main(string[] args)
         {
-            /*
-            Database.ExperienceLevels.Add(new List<ExperienceLevel>()
-            {
-                new ExperienceLevel(1, 0),
-                new ExperienceLevel(2, 500),
-                new ExperienceLevel(3, 1000),
-                new ExperienceLevel(4, 1500),
-                new ExperienceLevel(5, 2000),
-                new ExperienceLevel(6, 2500),
-                new ExperienceLevel(7, 3000),
-                new ExperienceLevel(8, 3500),
-                new ExperienceLevel(9, 4000),
-                new ExperienceLevel(10, 4500),
-                new ExperienceLevel(11, 5000),
-                new ExperienceLevel(12, 5500),
-                new ExperienceLevel(13, 6000),
-                new ExperienceLevel(14, 6500),
-                new ExperienceLevel(15, 7000),
-                new ExperienceLevel(16, 7500),
-                new ExperienceLevel(17, 8000),
-                new ExperienceLevel(18, 8500),
-                new ExperienceLevel(19, 9000),
-                new ExperienceLevel(20, 9500),
-                new ExperienceLevel(21, 10000),
-                new ExperienceLevel(22, 10500),
-                new ExperienceLevel(23, 11000),
-                new ExperienceLevel(24, 11500),
-                new ExperienceLevel(25, 12000)
-            });
-
-            Database.Players.Add(new List<Player>()
-            {
-                new Player
-                (
-                    username: "Sweet_KroNa",
-                    email: "kron2002a@yandex.ru",
-                    password: "9136KroNa",
-                    enableDataCollection: true
-                ),
-                new Player
-                (
-                    username: "Player1",
-                    email: "original.email@gmail.com",
-                    password: "1234password",
-                    enableDataCollection: true
-                ),
-                new Player
-                (
-                    username: "Dark Angel",
-                    email: "angelina.dark.2002@mail.ru",
-                    password: "iwilleatyoursoul",
-                    enableDataCollection: false
-                )
-            });
-
-            Database.Abilities.Add(new List<Ability>()
-            {
-                new Ability(@"Dash.asset"),
-                new Ability(@"QuieterThanWater.asset"),
-                new ActivatedAbility(@"NeedForSpeed_Level1.asset", 30, 120),
-                new ActivatedAbility(@"NeedForSpeed_Level2.asset", 30, 120),
-                new ActivatedAbility(@"NeedForSpeed_Level3.asset", 30, 120),
-                new ActivatedAbility(@"NeedForSpeed_Level4.asset", 30, 120),
-                new ActivatedAbility(@"InvisibleHat_Level1.asset", 30, 600),
-                new ActivatedAbility(@"InvisibleHat_Level2.asset", 60, 600),
-                new ActivatedAbility(@"InvisibleHat_Level3.asset", 90, 600),
-                new ActivatedAbility(@"InvisibleHat_Level4.asset", 120, 600)
-            });
-            */
-
             Database.Load();
 
             Console.WriteLine(string.Join("", Enumerable.Repeat("-", 65)));

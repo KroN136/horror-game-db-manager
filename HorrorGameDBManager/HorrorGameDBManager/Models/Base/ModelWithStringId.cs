@@ -1,17 +1,16 @@
 ﻿namespace HorrorGameDBManager.Models.Base
 {
-    internal abstract class ModelWithStringId/*(int idLength)*/ : Model
+    internal abstract class ModelWithStringId : Model
     {
         private readonly int idLength;
         private const string POSSIBLE_ID_CHARACTERS = "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz0123456789_-";
 
         public ModelWithStringId(int idLength) => this.idLength = idLength;
 
-        private string GenerateStringId(int length)
+        private string GenerateStringId()
         {
             Random random = new();
-
-            return new string(Enumerable.Repeat(POSSIBLE_ID_CHARACTERS, length)
+            return new string(Enumerable.Repeat(POSSIBLE_ID_CHARACTERS, idLength)
                 .Select(s => s[random.Next(s.Length)]).ToArray());
         }
 
@@ -23,11 +22,11 @@
             {
                 id = existingIds.First().ToString()!;
                 while (existingIds.Contains(id))
-                    id = GenerateStringId(idLength);
+                    id = GenerateStringId();
             }
             else
             {
-                id = GenerateStringId(idLength);
+                id = GenerateStringId();
             }
 
             return id;

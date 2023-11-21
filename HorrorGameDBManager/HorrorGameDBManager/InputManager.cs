@@ -23,7 +23,6 @@
         public static byte? ReadNullableByte(string message, string errorMessage = "Введите целое число в диапазоне от 0 до 255 (для присвоения NULL введите слово NULL заглавными буквами).")
         {
             byte parseOutput = 0;
-
             string input;
             while (true)
             {
@@ -57,7 +56,6 @@
         public static ushort? ReadNullableUShort(string message, string errorMessage = "Введите целое число в диапазоне от 0 до 65 535 (для присвоения NULL введите слово NULL заглавными буквами).")
         {
             ushort parseOutput = 0;
-
             string input;
             while (true)
             {
@@ -108,7 +106,6 @@
         {
             string[] trueOptions = new string[] { "true", "yes", "y", "истина", "да", "д" };
             string[] falseOptions = new string[] { "false", "no", "n", "ложь", "нет", "н" };
-
             string input;
             while (true)
             {
@@ -127,7 +124,6 @@
         {
             string[] trueOptions = new string[] { "true", "yes", "y", "истина", "да", "д" };
             string[] falseOptions = new string[] { "false", "no", "n", "ложь", "нет", "н" };
-
             string input;
             while (true)
             {
@@ -145,7 +141,6 @@
         public static DateTime? ReadNullableDateTime(string message, string errorMessage = "Введите значение типа DateTime (для присвоения NULL введите слово NULL заглавными буквами).")
         {
             DateTime parseOutput = new(0);
-
             string input;
             while (true)
             {
@@ -179,7 +174,6 @@
         public static float? ReadNullableFloat(string message, string errorMessage = "Введите значение типа float (для присвоения NULL введите слово NULL заглавными буквами).")
         {
             float parseOutput = float.NaN;
-
             string input;
             while (true)
             {

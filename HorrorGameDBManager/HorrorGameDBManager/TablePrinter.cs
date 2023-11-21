@@ -38,8 +38,6 @@ namespace HorrorGameDBManager
 
         public static void PrintTable(IEnumerable<string[]> dataList, string[] headers, string tableHeader, string tableName)
         {
-            tableHeader = tableHeader.ToUpper();
-
             int[] maxLengths = new int[headers.Length];
 
             for (int i = 0; i < maxLengths.Length; i++)
@@ -55,7 +53,7 @@ namespace HorrorGameDBManager
 
             string headerString = "| " + string.Join(" | ", headers) + " |";
 
-            Console.WriteLine($"{tableHeader} ({tableName}), всего элементов: {dataList.Count()}");
+            Console.WriteLine($"{tableHeader.ToUpper()} ({tableName}), всего элементов: {dataList.Count()}");
             Console.WriteLine(string.Join("", Enumerable.Repeat("-", headerString.Length)));
             Console.WriteLine(headerString);
             Console.WriteLine(string.Join("", Enumerable.Repeat("-", headerString.Length)));

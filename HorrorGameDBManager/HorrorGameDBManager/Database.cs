@@ -19,32 +19,28 @@ namespace HorrorGameDBManager
         public static Table<RarityLevel> RarityLevels { get; private set; } = new Table<RarityLevel>("rarity_levels");
         public static Table<Server> Servers { get; private set; } = new Table<Server>("servers");
 
-        private static Table<T> LoadTable<T>(string name) where T : Model
+        private static void LoadTable<T>(Table<T> table) where T : Model
         {
-            Table<T> table = new("EMPTY_TABLE");
-
             try
             {
-                if (File.Exists($"database\\{name}.json") == false)
+                if (File.Exists($"database\\{table.Name}.json") == false)
                     throw new FileNotFoundException($"Файл не существует.");
 
-                string fileContents = File.ReadAllText($"database\\{name}.json");
-                var data = JsonSerializer.Deserialize<Table<T>>(fileContents, new JsonSerializerOptions()
+                string fileContents = File.ReadAllText($"database\\{table.Name}.json");
+                var loadedTable = JsonSerializer.Deserialize<Table<T>>(fileContents, new JsonSerializerOptions()
                 {
-                    WriteIndented = true,
+                    WriteIndented = true
                 });
 
-                if (data == null)
+                if (loadedTable == null)
                     throw new FileLoadException("JsonSerializer вернул NULL.");
                 else
-                    table = data;
+                    table.Add(loadedTable.Entries);
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Не удалось загрузить таблицу {name} из файла: {ex.Message}\n");
+                Console.WriteLine($"Не удалось загрузить таблицу {table.Name} из файла: {ex.Message}\n");
             }
-
-            return table;
         }
 
         private static void SaveTable<T>(Table<T> table) where T : Model
@@ -53,7 +49,7 @@ namespace HorrorGameDBManager
             {
                 string json = JsonSerializer.Serialize(table, new JsonSerializerOptions()
                 {
-                    WriteIndented = true,
+                    WriteIndented = true
                 });
 
                 File.WriteAllText($"database\\{table.Name}.json", json);
@@ -66,18 +62,18 @@ namespace HorrorGameDBManager
 
         public static void Load()
         {
-            Abilities.Add(LoadTable<Ability>(Abilities.Name).Entries);
-            AcquiredAbilities.Add(LoadTable<AcquiredAbility>(AcquiredAbilities.Name).Entries);
-            Artifacts.Add(LoadTable<Artifact>(Artifacts.Name).Entries);
-            CollectedArtifacts.Add(LoadTable<CollectedArtifact>(CollectedArtifacts.Name).Entries);
-            Entities.Add(LoadTable<Entity>(Entities.Name).Entries);
-            ExperienceLevels.Add(LoadTable<ExperienceLevel>(ExperienceLevels.Name).Entries);
-            GameModes.Add(LoadTable<GameMode>(GameModes.Name).Entries);
-            GameSessions.Add(LoadTable<GameSession>(GameSessions.Name).Entries);
-            Players.Add(LoadTable<Player>(Players.Name).Entries);
-            PlayerSessions.Add(LoadTable<PlayerSession>(PlayerSessions.Name).Entries);
-            RarityLevels.Add(LoadTable<RarityLevel>(RarityLevels.Name).Entries);
-            Servers.Add(LoadTable<Server>(Servers.Name).Entries);
+            LoadTable(Abilities);
+            LoadTable(AcquiredAbilities);
+            LoadTable(Artifacts);
+            LoadTable(CollectedArtifacts);
+            LoadTable(Entities);
+            LoadTable(ExperienceLevels);
+            LoadTable(GameModes);
+            LoadTable(GameSessions);
+            LoadTable(Players);
+            LoadTable(PlayerSessions);
+            LoadTable(RarityLevels);
+            LoadTable(Servers);
         }
 
         public static void Save()

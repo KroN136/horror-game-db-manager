@@ -18,7 +18,7 @@ namespace HorrorGameDBManager
             if (activatedAbility)
             {
                 float duration = InputManager.ReadFloat("Длительность:");
-                float cooldown = InputManager.ReadFloat("Кулдаун:");
+                float cooldown = InputManager.ReadFloat("Восстановление:");
 
                 Database.Abilities.Add(new ActivatedAbility(assetName, duration, cooldown));
             }
@@ -191,7 +191,7 @@ namespace HorrorGameDBManager
             if (ability is ActivatedAbility activatedAbility)
             {
                 activatedAbility.Duration = InputManager.ReadFloat($"Длительность: {activatedAbility.Duration} ->");
-                activatedAbility.Cooldown = InputManager.ReadFloat($"Кулдаун: {activatedAbility.Cooldown} ->");
+                activatedAbility.Cooldown = InputManager.ReadFloat($"Восстановление: {activatedAbility.Cooldown} ->");
 
                 Database.Abilities.Edit(id, activatedAbility);
             }

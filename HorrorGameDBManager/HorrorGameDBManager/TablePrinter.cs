@@ -96,7 +96,7 @@ namespace HorrorGameDBManager
                 SetMaxLength("Название ассета", MaxColumnLength),
                 SetMaxLength("Активируемая", MaxColumnLength),
                 SetMaxLength("Длительность", MaxColumnLength),
-                SetMaxLength("Кулдаун", MaxColumnLength),
+                SetMaxLength("Восстановление", MaxColumnLength),
             };
 
             PrintTable(entryDataList, headers, "способности", Database.Abilities.Name);

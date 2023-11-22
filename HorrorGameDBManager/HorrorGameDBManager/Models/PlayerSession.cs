@@ -7,7 +7,7 @@ namespace HorrorGameDBManager.Models
     {
         private static readonly List<object> existingIds = new();
 
-        public ulong? GameSessionId { get; set; }
+        public ulong GameSessionId { get; set; }
         public string PlayerId { get; }
         public bool? IsFinished { get; set; }
         public bool? IsWon { get; set; }
@@ -15,7 +15,7 @@ namespace HorrorGameDBManager.Models
         public bool? PlayedAsEntity { get; set; }
         public byte? UsedEntityId { get; set; }
 
-        public PlayerSession(ulong? gameSessionId, string playerId, bool generateId = true)
+        public PlayerSession(ulong gameSessionId, string playerId, bool generateId = true)
         {
             if (generateId)
             {
@@ -23,7 +23,7 @@ namespace HorrorGameDBManager.Models
                 existingIds.Add(Id);
             }
 
-            if (gameSessionId.HasValue == false || Database.GameSessions.Exists(gameSessionId))
+            if (Database.GameSessions.Exists(gameSessionId))
                 GameSessionId = gameSessionId;
             else
                 throw new ArgumentException($"Игровая сессия {gameSessionId} не существует.");
@@ -52,7 +52,7 @@ namespace HorrorGameDBManager.Models
         }
 
         [JsonConstructor]
-        public PlayerSession(object id, ulong? gameSessionId, string playerId, bool? isFinished, bool? isWon, float? timeAlive, bool? playedAsEntity, byte? usedEntityId)
+        public PlayerSession(object id, ulong gameSessionId, string playerId, bool? isFinished, bool? isWon, float? timeAlive, bool? playedAsEntity, byte? usedEntityId)
         {
             id = ulong.Parse(id.ToString()!);
             Id = id;
@@ -68,7 +68,7 @@ namespace HorrorGameDBManager.Models
         }
 
         [JsonIgnore]
-        public GameSession? GameSession => GameSessionId.HasValue ? Database.GameSessions.Get(GameSessionId) : null;
+        public GameSession GameSession => Database.GameSessions.Get(GameSessionId);
         [JsonIgnore]
         public Player Player => Database.Players.Get(PlayerId);
         [JsonIgnore]

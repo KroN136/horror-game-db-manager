@@ -59,8 +59,6 @@ namespace HorrorGameDBManager.Models
         [JsonIgnore]
         public IEnumerable<AcquiredAbility> AcquiredAbilities => Database.AcquiredAbilities.Entries.Where(acquiredAbility => acquiredAbility.PlayerId.Equals(Id));
         [JsonIgnore]
-        public IEnumerable<CollectedArtifact> CollectedArtifacts => Database.CollectedArtifacts.Entries.Where(collectedArtifact => collectedArtifact.PlayerId.Equals(Id));
-        [JsonIgnore]
         public IEnumerable<PlayerSession> PlayerSessions => Database.PlayerSessions.Entries.Where(playerSession => playerSession.PlayerId.Equals(Id));
 
         public override Player Clone() => new(Username, Email, Password, EnableDataCollection, false) { Id = Id, RegistrationDateTime = RegistrationDateTime, ExperienceLevelId = ExperienceLevelId, ExperiencePoints = ExperiencePoints, AbilityPoints = AbilityPoints, IsOnline = IsOnline };

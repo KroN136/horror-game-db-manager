@@ -61,18 +61,15 @@ namespace HorrorGameDBManager
 
         public static void AddCollectedArtifact()
         {
-            if (!Database.Players.Entries.Any())
-                throw new ConstraintException("Невозможно создать подобранный артефакт, пока в базе данных нет игроков.");
-            if (!Database.Artifacts.Entries.Any())
-                throw new ConstraintException("Невозможно создать подобранный артефакт, пока в базе данных нет артефактов.");
             if (!Database.PlayerSessions.Entries.Any())
-                throw new ConstraintException("Невозможно создать подобранный артефакт, пока в базе данных нет сессий игроков.");
+                throw new ConstraintException("Невозможно создать собранный артефакт, пока в базе данных нет сессий игроков.");
+            if (!Database.Artifacts.Entries.Any())
+                throw new ConstraintException("Невозможно создать собранный артефакт, пока в базе данных нет артефактов.");
 
-            string playerId = InputManager.ReadPlayerId("ID игрока:");
+            ulong playerSessionId = InputManager.ReadPlayerSessionId("ID сессии игрока:");
             byte artifactId = InputManager.ReadArtifactId("ID артефакта:");
-            ulong? playerSessionId = InputManager.ReadNullablePlayerSessionId("ID сессии игрока:");
 
-            Database.CollectedArtifacts.Add(new CollectedArtifact(playerId, artifactId, playerSessionId));
+            Database.CollectedArtifacts.Add(new CollectedArtifact(playerSessionId, artifactId));
             Console.WriteLine(ADD_SUCCESS);
             Database.Save();
         }
@@ -105,23 +102,22 @@ namespace HorrorGameDBManager
         public static void AddGameMode()
         {
             string assetName = InputManager.ReadString("Название ассета:");
+            bool isActive = InputManager.ReadBool("Активен:");
             byte playerCount = InputManager.ReadByte("Количество игроков:");
             float? timeLimit = InputManager.ReadNullableFloat("Лимит времени (в секундах):");
 
-            Database.GameModes.Add(new GameMode(assetName, playerCount, timeLimit));
+            Database.GameModes.Add(new GameMode(assetName, isActive, playerCount, timeLimit));
             Console.WriteLine(ADD_SUCCESS);
             Database.Save();
         }
 
         public static void AddGameSession()
         {
-            if (!Database.Servers.Entries.Any())
-                throw new ConstraintException("Невозможно создать игровую сессию, пока в базе данных нет серверов.");
             if (!Database.GameModes.Entries.Any())
                 throw new ConstraintException("Невозможно создать игровую сессию, пока в базе данных нет игровых режимов.");
 
             ushort? serverId = InputManager.ReadNullableServerId("ID сервера:");
-            byte? gameModeId = InputManager.ReadNullableGameModeId("ID игрового режима:");
+            byte gameModeId = InputManager.ReadGameModeId("ID игрового режима:");
 
             Database.GameSessions.Add(new GameSession(serverId, gameModeId));
             Console.WriteLine(ADD_SUCCESS);
@@ -150,7 +146,7 @@ namespace HorrorGameDBManager
             if (!Database.Players.Entries.Any())
                 throw new ConstraintException("Невозможно создать сессию игрока, пока в базе данных нет игроков.");
 
-            ulong? gameSessionId = InputManager.ReadNullableGameSessionId("ID игровой сессии:");
+            ulong gameSessionId = InputManager.ReadGameSessionId("ID игровой сессии:");
             string playerId = InputManager.ReadPlayerId("ID игрока:");
 
             Database.PlayerSessions.Add(new PlayerSession(gameSessionId, playerId));
@@ -216,17 +212,6 @@ namespace HorrorGameDBManager
             Database.Save();
         }
 
-        public static void EditCollectedArtifact(ulong id)
-        {
-            var collectedArtifact = Database.CollectedArtifacts.Get(id);
-
-            collectedArtifact.PlayerSessionId = InputManager.ReadNullablePlayerSessionId("ID сессии игрока:");
-
-            Database.CollectedArtifacts.Edit(id, collectedArtifact);
-            Console.WriteLine(EDIT_SUCCESS);
-            Database.Save();
-        }
-
         public static void EditEntity(byte id)
         {
             var entity = Database.Entities.Get(id);
@@ -257,6 +242,7 @@ namespace HorrorGameDBManager
             var gameMode = Database.GameModes.Get(id);
 
             gameMode.AssetName = InputManager.ReadString($"Название ассета: {gameMode.AssetName} ->");
+            gameMode.IsActive = InputManager.ReadBool($"Активен: {gameMode.IsActive} ->");
             gameMode.PlayerCount = InputManager.ReadByte($"Количество игроков: {gameMode.PlayerCount} ->");
             gameMode.TimeLimit = InputManager.ReadNullableFloat($"Лимит времени (в секундах): {gameMode.TimeLimit} ->");
 
@@ -270,7 +256,7 @@ namespace HorrorGameDBManager
             var gameSession = Database.GameSessions.Get(id);
 
             gameSession.ServerId = InputManager.ReadNullableServerId($"ID сервера: {gameSession.ServerId} ->");
-            gameSession.GameModeId = InputManager.ReadNullableGameModeId($"ID игрового режима: {gameSession.GameModeId} ->");
+            gameSession.GameModeId = InputManager.ReadGameModeId($"ID игрового режима: {gameSession.GameModeId} ->");
             gameSession.EndDateTime = InputManager.ReadNullableDateTime($"Дата и время окончания: {gameSession.EndDateTime} ->");
 
             Database.GameSessions.Edit(id, gameSession);
@@ -300,16 +286,14 @@ namespace HorrorGameDBManager
         {
             var playerSession = Database.PlayerSessions.Get(id);
 
-            playerSession.GameSessionId = InputManager.ReadNullableGameSessionId($"ID игровой сессии: {playerSession.GameSessionId} ->");
-            
-            if (playerSession.Player.EnableDataCollection)
-            {
-                playerSession.IsFinished = InputManager.ReadNullableBool($"Завершена: {playerSession.IsFinished} ->");
-                playerSession.IsWon = InputManager.ReadNullableBool($"Выиграна: {playerSession.IsWon} ->");
-                playerSession.TimeAlive = InputManager.ReadNullableFloat($"Время жизни (в секундах): {playerSession.TimeAlive} ->");
-                playerSession.PlayedAsEntity = InputManager.ReadNullableBool($"Использована сущность: {playerSession.PlayedAsEntity} ->");
-                playerSession.UsedEntityId = InputManager.ReadNullableEntityId($"ID использованной сущности: {playerSession.UsedEntityId} ->");
-            }
+            if (playerSession.Player.EnableDataCollection == false)
+                throw new ArgumentException($"Сессия игрока {id} не подлежит редактированию, так как у игрока {playerSession.PlayerId}, связанного с ней, отключён сбор данных.");
+
+            playerSession.IsFinished = InputManager.ReadNullableBool($"Завершена: {playerSession.IsFinished} ->");
+            playerSession.IsWon = InputManager.ReadNullableBool($"Выиграна: {playerSession.IsWon} ->");
+            playerSession.TimeAlive = InputManager.ReadNullableFloat($"Время жизни (в секундах): {playerSession.TimeAlive} ->");
+            playerSession.PlayedAsEntity = InputManager.ReadNullableBool($"Использована сущность: {playerSession.PlayedAsEntity} ->");
+            playerSession.UsedEntityId = InputManager.ReadNullableEntityId($"ID использованной сущности: {playerSession.UsedEntityId} ->");
 
             Database.PlayerSessions.Edit(id, playerSession);
             Console.WriteLine(EDIT_SUCCESS);
@@ -446,7 +430,7 @@ namespace HorrorGameDBManager
             }
 
             if (Database.ExperienceLevels.Entries.Count == 1 && (Database.Entities.Entries.Any() || Database.Players.Entries.Any()))
-                throw new ConstraintException("Невозможно удалить единственный уровень опыта, так как к нему привязана одна или несколько сущностей и/или игроков.");
+                throw new ConstraintException("Невозможно удалить единственный уровень опыта, так как с ним связана одна или несколько сущностей и/или игроков.");
 
             var experienceLevel = Database.ExperienceLevels.Get(id);
 
@@ -482,11 +466,8 @@ namespace HorrorGameDBManager
 
             var gameMode = Database.GameModes.Get(id);
 
-            foreach (var gameSession in gameMode.GameSessions)
-            {
-                gameSession.GameModeId = null;
-                Database.GameSessions.Edit(gameSession.Id, gameSession);
-            }
+            if (gameMode.GameSessions.Any())
+                throw new ConstraintException("Невозможно удалить игровой режим, так как с ним связана одна или несколько игровых сессий.");
 
             Database.GameModes.Remove(id);
             Console.WriteLine(REMOVE_SUCCESS);
@@ -503,11 +484,8 @@ namespace HorrorGameDBManager
 
             var gameSession = Database.GameSessions.Get(id);
 
-            foreach (var playerSession in gameSession.PlayerSessions)
-            {
-                playerSession.GameSessionId = null;
-                Database.PlayerSessions.Edit(playerSession.Id, playerSession);
-            }
+            if (gameSession.PlayerSessions.Any())
+                throw new ConstraintException("Невозможно удалить игровую сессию, так как с ней связана одна или несколько сессий игроков.");
 
             Database.GameSessions.Remove(id);
             Console.WriteLine(REMOVE_SUCCESS);
@@ -526,9 +504,6 @@ namespace HorrorGameDBManager
 
             foreach (var acquiredAbility in player.AcquiredAbilities)
                 RemoveAcquiredAbility((ulong) acquiredAbility.Id, true);
-
-            foreach (var collectedArtifact in player.CollectedArtifacts)
-                RemoveCollectedArtifact((ulong) collectedArtifact.Id, true);
 
             foreach (var playerSession in player.PlayerSessions)
                 RemovePlayerSession((ulong) playerSession.Id, true);
@@ -549,10 +524,7 @@ namespace HorrorGameDBManager
             var playerSession = Database.PlayerSessions.Get(id);
 
             foreach (var collectedArtifact in playerSession.CollectedArtifacts)
-            {
-                collectedArtifact.PlayerSessionId = null;
-                Database.CollectedArtifacts.Edit(collectedArtifact.Id, collectedArtifact);
-            }
+                RemoveCollectedArtifact((ulong) collectedArtifact.Id, true);
 
             Database.PlayerSessions.Remove(id);
             Console.WriteLine(REMOVE_SUCCESS);

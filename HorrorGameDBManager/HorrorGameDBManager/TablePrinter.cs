@@ -169,9 +169,8 @@ namespace HorrorGameDBManager
                 string[] entryData = new string[]
                 {
                     entry.Id.ToString()!,
-                    entry.PlayerId,
+                    entry.PlayerSessionId.ToString(),
                     entry.ArtifactId.ToString(),
-                    entry.PlayerSessionId.HasValue ? entry.PlayerSessionId.Value.ToString() : "-"
                 };
 
                 entryDataList.Add(entryData);
@@ -180,9 +179,8 @@ namespace HorrorGameDBManager
             string[] headers = new string[]
             {
                 SetMaxLength("ID", MaxColumnLength),
-                SetMaxLength("ID игрока", MaxColumnLength),
-                SetMaxLength("ID артефакта", MaxColumnLength),
-                SetMaxLength("ID сессии игрока", MaxColumnLength)
+                SetMaxLength("ID сессии игрока", MaxColumnLength),
+                SetMaxLength("ID артефакта", MaxColumnLength)
             };
 
             PrintTable(entryDataList, headers, "собранные артефакты", Database.CollectedArtifacts.Name);
@@ -260,8 +258,9 @@ namespace HorrorGameDBManager
                 {
                     entry.Id.ToString()!,
                     entry.AssetName,
+                    entry.IsActive ? "да" : "нет",
                     entry.PlayerCount.ToString(),
-                    entry.TimeLimit.HasValue ? entry.TimeLimit.Value.ToString() : "-",
+                    entry.TimeLimit.HasValue ? entry.TimeLimit.Value.ToString() : "-"
                 };
 
                 entryDataList.Add(entryData);
@@ -272,7 +271,8 @@ namespace HorrorGameDBManager
                 SetMaxLength("ID", MaxColumnLength),
                 SetMaxLength("Название ассета", MaxColumnLength),
                 SetMaxLength("Количество игроков", MaxColumnLength),
-                SetMaxLength("Лимит времени", MaxColumnLength)
+                SetMaxLength("Лимит времени", MaxColumnLength),
+                SetMaxLength("Активен", MaxColumnLength)
             };
 
             PrintTable(entryDataList, headers, "игровые режимы", Database.GameModes.Name);
@@ -290,7 +290,7 @@ namespace HorrorGameDBManager
                 {
                     entry.Id.ToString()!,
                     entry.ServerId.HasValue ? entry.ServerId.Value.ToString() : "-",
-                    entry.GameModeId.HasValue ? entry.GameModeId.Value.ToString() : "-",
+                    entry.GameModeId.ToString(),
                     entry.StartDateTime.ToString(),
                     entry.EndDateTime.HasValue ? entry.EndDateTime.Value.ToString() : "-",
                 };
@@ -363,7 +363,7 @@ namespace HorrorGameDBManager
                 string[] entryData = new string[]
                 {
                     entry.Id.ToString()!,
-                    entry.GameSessionId.HasValue ? entry.GameSessionId.Value.ToString() : "-",
+                    entry.GameSessionId.ToString(),
                     entry.PlayerId,
                     entry.IsFinished.HasValue ? entry.IsFinished.Value ? "да" : "нет" : "-",
                     entry.IsWon.HasValue ? entry.IsWon.Value ? "да" : "нет" : "-",

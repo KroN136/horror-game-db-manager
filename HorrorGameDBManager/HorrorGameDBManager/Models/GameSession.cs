@@ -8,11 +8,11 @@ namespace HorrorGameDBManager.Models
         private static readonly List<object> existingIds = new();
 
         public ushort? ServerId { get; set; }
-        public byte? GameModeId { get; set; }
+        public byte GameModeId { get; set; }
         public DateTime StartDateTime { get; private set; }
         public DateTime? EndDateTime { get; set; }
 
-        public GameSession(ushort? serverId, byte? gameModeId, bool generateId = true)
+        public GameSession(ushort? serverId, byte gameModeId, bool generateId = true)
         {
             if (generateId)
             {
@@ -25,7 +25,7 @@ namespace HorrorGameDBManager.Models
             else
                 throw new ArgumentException($"Сервер {serverId} не существует.");
 
-            if (gameModeId.HasValue == false || Database.GameModes.Exists(gameModeId))
+            if (Database.GameModes.Exists(gameModeId))
                 GameModeId = gameModeId;
             else
                 throw new ArgumentException($"Режим игры {gameModeId} не существует.");
@@ -35,7 +35,7 @@ namespace HorrorGameDBManager.Models
         }
 
         [JsonConstructor]
-        public GameSession(object id, ushort? serverId, byte? gameModeId, DateTime startDateTime, DateTime? endDateTime)
+        public GameSession(object id, ushort? serverId, byte gameModeId, DateTime startDateTime, DateTime? endDateTime)
         {
             id = ulong.Parse(id.ToString()!);
             Id = id;
@@ -50,7 +50,7 @@ namespace HorrorGameDBManager.Models
         [JsonIgnore]
         public Server? Server => ServerId.HasValue ? Database.Servers.Get(ServerId) : null;
         [JsonIgnore]
-        public GameMode? GameMode => GameModeId.HasValue ? Database.GameModes.Get(GameModeId) : null;
+        public GameMode GameMode => Database.GameModes.Get(GameModeId);
         [JsonIgnore]
         public IEnumerable<PlayerSession> PlayerSessions => Database.PlayerSessions.Entries.Where(playerSession => playerSession.GameSessionId.Equals(Id));
 

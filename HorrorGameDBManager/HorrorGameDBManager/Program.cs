@@ -183,11 +183,11 @@ namespace HorrorGameDBManager
             if (tableName.Equals(Database.Abilities.Name))
                 EntryManager.EditAbility(byte.Parse(id));
             else if (tableName.Equals(Database.AcquiredAbilities.Name))
-                throw new ArgumentException($"Таблица {tableName} не является редактируемой.");
+                throw new ArgumentException($"Таблица {tableName} не подлежит редактированию.");
             else if (tableName.Equals(Database.Artifacts.Name))
                 EntryManager.EditArtifact(byte.Parse(id));
             else if (tableName.Equals(Database.CollectedArtifacts.Name))
-                EntryManager.EditCollectedArtifact(ulong.Parse(id));
+                throw new ArgumentException($"Таблица {tableName} не подлежит редактированию.");
             else if (tableName.Equals(Database.Entities.Name))
                 EntryManager.EditEntity(byte.Parse(id));
             else if (tableName.Equals(Database.ExperienceLevels.Name))

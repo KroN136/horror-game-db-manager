@@ -7,11 +7,10 @@ namespace HorrorGameDBManager.Models
     {
         private static readonly List<object> existingIds = new();
 
-        public string PlayerId { get; }
+        public ulong PlayerSessionId { get; set; }
         public byte ArtifactId { get; }
-        public ulong? PlayerSessionId { get; set; }
 
-        public CollectedArtifact(string playerId, byte artifactId, ulong? playerSessionId, bool generateId = true)
+        public CollectedArtifact(ulong playerSessionId, byte artifactId, bool generateId = true)
         {
             if (generateId)
             {
@@ -19,45 +18,36 @@ namespace HorrorGameDBManager.Models
                 existingIds.Add(Id);
             }
 
-            if (Database.Players.Exists(playerId))
-                PlayerId = playerId;
+            if (Database.PlayerSessions.Exists(playerSessionId))
+                PlayerSessionId = playerSessionId;
             else
-                throw new ArgumentException($"Игрок {playerId} не существует.");
+                throw new ArgumentException($"Сессия игрока {playerSessionId} не существует.");
 
             if (Database.Artifacts.Exists(artifactId))
                 ArtifactId = artifactId;
             else
                 throw new ArgumentException($"Артефакт {artifactId} не существует.");
 
-            if (playerSessionId.HasValue == false || Database.GameSessions.Exists(playerSessionId))
-                PlayerSessionId = playerSessionId;
-            else
-                throw new ArgumentException($"Сессия игрока {playerSessionId} не существует.");
-
-            PlayerId = playerId;
-            ArtifactId = artifactId;
             PlayerSessionId = playerSessionId;
+            ArtifactId = artifactId;
         }
 
         [JsonConstructor]
-        public CollectedArtifact(object id, string playerId, byte artifactId, ulong? playerSessionId)
+        public CollectedArtifact(object id, ulong playerSessionId, byte artifactId)
         {
             id = ulong.Parse(id.ToString()!);
             Id = id;
             existingIds.Add(Id);
 
-            PlayerId = playerId;
-            ArtifactId = artifactId;
             PlayerSessionId = playerSessionId;
+            ArtifactId = artifactId;
         }
 
         [JsonIgnore]
-        public Player Player => Database.Players.Get(PlayerId);
+        public PlayerSession PlayerSession => Database.PlayerSessions.Get(PlayerSessionId);
         [JsonIgnore]
         public Artifact Artifact => Database.Artifacts.Get(ArtifactId);
-        [JsonIgnore]
-        public PlayerSession? PlayerSession => PlayerSessionId.HasValue ? Database.PlayerSessions.Get(PlayerSessionId) : null;
 
-        public override CollectedArtifact Clone() => new(PlayerId, ArtifactId, PlayerSessionId, false) { Id = Id };
+        public override CollectedArtifact Clone() => new(PlayerSessionId, ArtifactId, false) { Id = Id };
     }
 }

@@ -240,19 +240,19 @@
             return id;
         }
 
-        public static byte? ReadNullableGameModeId(string message)
+        public static byte ReadGameModeId(string message)
         {
-            byte? id = 0;
-            while (id.HasValue && !Database.GameModes.Exists(id))
+            byte id = 0;
+            while (!Database.GameModes.Exists(id))
             {
-                id = ReadNullableByte(message);
-                if (id.HasValue && !Database.GameModes.Exists(id))
+                id = ReadByte(message);
+                if (!Database.GameModes.Exists(id))
                     Console.WriteLine($"Режим игры {id} не существует.");
             }
             return id;
         }
 
-        public static ulong ReadNullableGameSessionId(string message)
+        public static ulong ReadGameSessionId(string message)
         {
             ulong id = 0;
             while (!Database.GameSessions.Exists(id))
@@ -276,7 +276,7 @@
             return id;
         }
 
-        public static ulong ReadNullablePlayerSessionId(string message)
+        public static ulong ReadPlayerSessionId(string message)
         {
             ulong id = 0;
             while (!Database.PlayerSessions.Exists(id))

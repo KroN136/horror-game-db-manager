@@ -898,7 +898,7 @@ namespace HorrorGameDBManager
                     throw new FormatException(EMPTY_COMMAND_MESSAGE);
 
                 string[] words = input.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-                string command = words[0];
+                string command = words.First();
                 string[] arguments = words.Length > 1 ? words[1..words.Length] : Array.Empty<string>();
 
                 try

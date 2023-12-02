@@ -20,14 +20,17 @@ namespace HorrorGameDBManager
         public static Table<RarityLevel> RarityLevels { get; private set; } = new Table<RarityLevel>("rarity_levels");
         public static Table<Server> Servers { get; private set; } = new Table<Server>("servers");
 
+        private static readonly string path = AppContext.BaseDirectory + "database";
+
         private static void LoadTable<T>(Table<T> table) where T : Model
         {
             try
             {
-                if (File.Exists($"database\\{table.Name}.json") == false)
-                    throw new FileNotFoundException($"Файл не существует.");
+                string fileName = $"{path + Path.DirectorySeparatorChar + table.Name}.json";
+                if (File.Exists(fileName) == false)
+                    throw new FileNotFoundException($"Файл {fileName} не существует.");
 
-                string fileContents = File.ReadAllText($"database\\{table.Name}.json");
+                string fileContents = File.ReadAllText(fileName);
                 var loadedTable = JsonSerializer.Deserialize<Table<T>>(fileContents, new JsonSerializerOptions()
                 {
                     WriteIndented = true
@@ -53,7 +56,8 @@ namespace HorrorGameDBManager
                     WriteIndented = true
                 });
 
-                File.WriteAllText($"database\\{table.Name}.json", json);
+                string fileName = $"{path + Path.DirectorySeparatorChar + table.Name}.json";
+                File.WriteAllText(fileName, json);
             }
             catch (Exception ex)
             {

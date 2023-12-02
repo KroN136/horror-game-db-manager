@@ -7,6 +7,14 @@ namespace HorrorGameDBManager
     {
         private static bool loop = true;
 
+        private const string HELP_COMMAND = "help";
+        private const string TABLES_COMMAND = "tables";
+        private const string VIEW_COMMAND = "view";
+        private const string ADD_COMMAND = "add";
+        private const string EDIT_COMMAND = "edit";
+        private const string REMOVE_COMMAND = "remove";
+        private const string EXIT_COMMAND = "exit";
+
         private const string EMPTY_COMMAND_MESSAGE = "Введена пустая команда.";
         private const string UNKNOWN_COMMAND_MESSAGE = "Команда не распознана.";
         private const string WRONG_ARGUMENT_COUNT_MESSAGE = "Введено неверное число аргументов.";
@@ -19,39 +27,39 @@ namespace HorrorGameDBManager
 
         private static void Help()
         {
-            Help("help");
-            Help("tables");
-            Help("view");
-            Help("add");
-            Help("edit");
-            Help("remove");
-            Help("exit");
+            Help(HELP_COMMAND);
+            Help(TABLES_COMMAND);
+            Help(VIEW_COMMAND);
+            Help(ADD_COMMAND);
+            Help(EDIT_COMMAND);
+            Help(REMOVE_COMMAND);
+            Help(EXIT_COMMAND);
         }
 
         private static void Help(string command)
         {
             switch (command)
             {
-                case "help":
+                case HELP_COMMAND:
                     Console.WriteLine("help [cmd] - просмотр справки по всем командам / просмотр справки по команде cmd");
                     break;
-                case "tables":
+                case TABLES_COMMAND:
                     Console.WriteLine("tables - просмотр списка всех таблиц");
                     break;
-                case "view":
+                case VIEW_COMMAND:
                     Console.WriteLine("view * - просмотр всех записей во всех таблицах");
                     Console.WriteLine("view <table> [id] - просмотр всех записей в таблице table / просмотр записи с идентификатором id в таблице table");
                     break;
-                case "add":
+                case ADD_COMMAND:
                     Console.WriteLine("add <table> - добавление записи в таблицу table");
                     break;
-                case "edit":
+                case EDIT_COMMAND:
                     Console.WriteLine("edit <table> <id> - редактирование записи с идентификатором id в таблице table");
                     break;
-                case "remove":
+                case REMOVE_COMMAND:
                     Console.WriteLine("remove <table> <id> - удаление записи с идентификатором id в таблице table");
                     break;
-                case "exit":
+                case EXIT_COMMAND:
                     Console.WriteLine("exit - выход");
                     break;
                 default:
@@ -823,7 +831,7 @@ namespace HorrorGameDBManager
         {
             switch (command)
             {
-                case "help":
+                case HELP_COMMAND:
                     if (arguments.Length > 1)
                         throw new FormatException(WRONG_ARGUMENT_COUNT_MESSAGE);
                     else if (arguments.Length == 1)
@@ -831,13 +839,13 @@ namespace HorrorGameDBManager
                     else
                         Help();
                     break;
-                case "tables":
+                case TABLES_COMMAND:
                     if (arguments.Length > 0)
                         throw new FormatException(WRONG_ARGUMENT_COUNT_MESSAGE);
                     else
                         Tables();
                     break;
-                case "view":
+                case VIEW_COMMAND:
                     if (arguments.Length == 0 || arguments.Length > 2)
                         throw new FormatException(WRONG_ARGUMENT_COUNT_MESSAGE);
                     else if (arguments.Length == 2)
@@ -845,25 +853,25 @@ namespace HorrorGameDBManager
                     else
                         View(arguments[0]);
                     break;
-                case "add":
+                case ADD_COMMAND:
                     if (arguments.Length != 1)
                         throw new FormatException(WRONG_ARGUMENT_COUNT_MESSAGE);
                     else
                         Add(arguments[0]);
                     break;
-                case "edit":
+                case EDIT_COMMAND:
                     if (arguments.Length != 2)
                         throw new FormatException(WRONG_ARGUMENT_COUNT_MESSAGE);
                     else
                         Edit(arguments[0], arguments[1]);
                     break;
-                case "remove":
+                case REMOVE_COMMAND:
                     if (arguments.Length != 2)
                         throw new FormatException(WRONG_ARGUMENT_COUNT_MESSAGE);
                     else
                         Remove(arguments[0], arguments[1]);
                     break;
-                case "exit":
+                case EXIT_COMMAND:
                     Exit();
                     break;
                 default:
@@ -905,25 +913,15 @@ namespace HorrorGameDBManager
                 {
                     ExecuteUserCommand(command, arguments);
                 }
-                catch (ArgumentException ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
-                catch (FormatException ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
-                catch (ConstraintException ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
-                catch (DataException ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"Произошла непредвиденная ошибка.\n{ex.Message}\n{ex.StackTrace}");
+                    if (ex is ArgumentException ||
+                        ex is FormatException ||
+                        ex is ConstraintException ||
+                        ex is DataException)
+                        Console.WriteLine(ex.Message);
+                    else
+                        Console.WriteLine($"Произошла непредвиденная ошибка:\n{ex.Message}\n{ex.StackTrace}");
                 }
 
                 Console.WriteLine();

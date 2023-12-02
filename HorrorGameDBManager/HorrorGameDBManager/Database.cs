@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Data;
+using System.Text.Json;
 using HorrorGameDBManager.Models;
 using HorrorGameDBManager.Models.Base;
 
@@ -39,7 +40,7 @@ namespace HorrorGameDBManager
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Не удалось загрузить таблицу {table.Name} из файла: {ex.Message}\n");
+                throw new DataException($"Не удалось загрузить таблицу {table.Name} с диска: {ex.Message}\n");
             }
         }
 
@@ -56,7 +57,7 @@ namespace HorrorGameDBManager
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Не удалось сохранить таблицу {table.Name} в файл: {ex.Message}\n");
+                throw new DataException($"Не удалось сохранить таблицу {table.Name} на диск: {ex.Message}\n");
             }
         }
 

@@ -11,6 +11,10 @@ namespace HorrorGameDBManager
         private const string UNKNOWN_COMMAND_MESSAGE = "Команда не распознана.";
         private const string WRONG_ARGUMENT_COUNT_MESSAGE = "Введено неверное число аргументов.";
 
+        private const string ADD_SUCCESS = "Запись успешно добавлена.";
+        private const string EDIT_SUCCESS = "Запись успешно отредактирована.";
+        private const string REMOVE_SUCCESS = "Запись успешно удалена.";
+
         #region Command Actions
 
         private static void Help()
@@ -151,29 +155,29 @@ namespace HorrorGameDBManager
         private static void Add(string tableName)
         {
             if (tableName.Equals(Database.Abilities.Name))
-                EntryManager.AddAbility();
+                AddAbility();
             else if (tableName.Equals(Database.AcquiredAbilities.Name))
-                EntryManager.AddAcquiredAbility();
+                AddAcquiredAbility();
             else if (tableName.Equals(Database.Artifacts.Name))
-                EntryManager.AddArtifact();
+                AddArtifact();
             else if (tableName.Equals(Database.CollectedArtifacts.Name))
-                EntryManager.AddCollectedArtifact();
+                AddCollectedArtifact();
             else if (tableName.Equals(Database.Entities.Name))
-                EntryManager.AddEntity();
+                AddEntity();
             else if (tableName.Equals(Database.ExperienceLevels.Name))
-                EntryManager.AddExperienceLevel();
+                AddExperienceLevel();
             else if (tableName.Equals(Database.GameModes.Name))
-                EntryManager.AddGameMode();
+                AddGameMode();
             else if (tableName.Equals(Database.GameSessions.Name))
-                EntryManager.AddGameSession();
+                AddGameSession();
             else if (tableName.Equals(Database.Players.Name))
-                EntryManager.AddPlayer();
+                AddPlayer();
             else if (tableName.Equals(Database.PlayerSessions.Name))
-                EntryManager.AddPlayerSession();
+                AddPlayerSession();
             else if (tableName.Equals(Database.RarityLevels.Name))
-                EntryManager.AddRarityLevel();
+                AddRarityLevel();
             else if (tableName.Equals(Database.Servers.Name))
-                EntryManager.AddServer();
+                AddServer();
             else
                 throw new ArgumentException($"Таблица {tableName} не существует.");
         }
@@ -181,29 +185,29 @@ namespace HorrorGameDBManager
         private static void Edit(string tableName, string id)
         {
             if (tableName.Equals(Database.Abilities.Name))
-                EntryManager.EditAbility(byte.Parse(id));
+                EditAbility(byte.Parse(id));
             else if (tableName.Equals(Database.AcquiredAbilities.Name))
                 throw new ArgumentException($"Таблица {tableName} не подлежит редактированию.");
             else if (tableName.Equals(Database.Artifacts.Name))
-                EntryManager.EditArtifact(byte.Parse(id));
+                EditArtifact(byte.Parse(id));
             else if (tableName.Equals(Database.CollectedArtifacts.Name))
                 throw new ArgumentException($"Таблица {tableName} не подлежит редактированию.");
             else if (tableName.Equals(Database.Entities.Name))
-                EntryManager.EditEntity(byte.Parse(id));
+                EditEntity(byte.Parse(id));
             else if (tableName.Equals(Database.ExperienceLevels.Name))
-                EntryManager.EditExperienceLevel(byte.Parse(id));
+                EditExperienceLevel(byte.Parse(id));
             else if (tableName.Equals(Database.GameModes.Name))
-                EntryManager.EditGameMode(byte.Parse(id));
+                EditGameMode(byte.Parse(id));
             else if (tableName.Equals(Database.GameSessions.Name))
-                EntryManager.EditGameSession(ulong.Parse(id));
+                EditGameSession(ulong.Parse(id));
             else if (tableName.Equals(Database.Players.Name))
-                EntryManager.EditPlayer(id);
+                EditPlayer(id);
             else if (tableName.Equals(Database.PlayerSessions.Name))
-                EntryManager.EditPlayerSession(ulong.Parse(id));
+                EditPlayerSession(ulong.Parse(id));
             else if (tableName.Equals(Database.RarityLevels.Name))
-                EntryManager.EditRarityLevel(byte.Parse(id));
+                EditRarityLevel(byte.Parse(id));
             else if (tableName.Equals(Database.Servers.Name))
-                EntryManager.EditServer(ushort.Parse(id));
+                EditServer(ushort.Parse(id));
             else
                 throw new ArgumentException($"Таблица {tableName} не существует.");
         }
@@ -211,29 +215,29 @@ namespace HorrorGameDBManager
         private static void Remove(string tableName, string id)
         {
             if (tableName.Equals(Database.Abilities.Name))
-                EntryManager.RemoveAbility(byte.Parse(id));
+                RemoveAbility(byte.Parse(id));
             else if (tableName.Equals(Database.AcquiredAbilities.Name))
-                EntryManager.RemoveAcquiredAbility(ulong.Parse(id));
+                RemoveAcquiredAbility(ulong.Parse(id));
             else if (tableName.Equals(Database.Artifacts.Name))
-                EntryManager.RemoveArtifact(byte.Parse(id));
+                RemoveArtifact(byte.Parse(id));
             else if (tableName.Equals(Database.CollectedArtifacts.Name))
-                EntryManager.RemoveCollectedArtifact(ulong.Parse(id));
+                RemoveCollectedArtifact(ulong.Parse(id));
             else if (tableName.Equals(Database.Entities.Name))
-                EntryManager.RemoveEntity(byte.Parse(id));
+                RemoveEntity(byte.Parse(id));
             else if (tableName.Equals(Database.ExperienceLevels.Name))
-                EntryManager.RemoveExperienceLevel(byte.Parse(id));
+                RemoveExperienceLevel(byte.Parse(id));
             else if (tableName.Equals(Database.GameModes.Name))
-                EntryManager.RemoveGameMode(byte.Parse(id));
+                RemoveGameMode(byte.Parse(id));
             else if (tableName.Equals(Database.GameSessions.Name))
-                EntryManager.RemoveGameSession(ulong.Parse(id));
+                RemoveGameSession(ulong.Parse(id));
             else if (tableName.Equals(Database.Players.Name))
-                EntryManager.RemovePlayer(id);
+                RemovePlayer(id);
             else if (tableName.Equals(Database.PlayerSessions.Name))
-                EntryManager.RemovePlayerSession(ulong.Parse(id));
+                RemovePlayerSession(ulong.Parse(id));
             else if (tableName.Equals(Database.RarityLevels.Name))
-                EntryManager.RemoveRarityLevel(byte.Parse(id));
+                RemoveRarityLevel(byte.Parse(id));
             else if (tableName.Equals(Database.Servers.Name))
-                EntryManager.RemoveServer(ushort.Parse(id));
+                RemoveServer(ushort.Parse(id));
             else
                 throw new ArgumentException($"Таблица {tableName} не существует.");
         }
@@ -242,9 +246,641 @@ namespace HorrorGameDBManager
 
         #endregion
 
+        #region Database Entry Adders
+
+        public static void AddAbility()
+        {
+            bool activatedAbility = InputManager.ReadBool("Активируемая способность?");
+            string assetName = InputManager.ReadString("Название ассета:");
+            if (activatedAbility)
+            {
+                float duration = InputManager.ReadFloat("Длительность:");
+                float cooldown = InputManager.ReadFloat("Восстановление:");
+
+                Database.Abilities.Add(new ActivatedAbility(assetName, duration, cooldown));
+            }
+            else
+            {
+                Database.Abilities.Add(new Ability(assetName));
+            }
+
+            Console.WriteLine(ADD_SUCCESS);
+            Database.Save();
+        }
+
+        public static void AddAcquiredAbility()
+        {
+            if (!Database.Players.Entries.Any())
+                throw new ConstraintException("Невозможно создать приобретённую способность, пока в базе данных нет игроков.");
+            if (!Database.Abilities.Entries.Any())
+                throw new ConstraintException("Невозможно создать приобретённую способность, пока в базе данных нет способностей.");
+
+            string playerId = InputManager.ReadPlayerId("ID игрока:");
+            byte abilityId = InputManager.ReadAbilityId("ID способности:");
+
+            Database.AcquiredAbilities.Add(new AcquiredAbility(playerId, abilityId));
+            Console.WriteLine(ADD_SUCCESS);
+            Database.Save();
+        }
+
+        public static void AddArtifact()
+        {
+            if (!Database.RarityLevels.Entries.Any())
+                throw new ConstraintException("Невозможно создать артефакт, пока в базе данных нет уровней редкости.");
+
+            string assetName = InputManager.ReadString("Название ассета:");
+            byte rarityLevelId = InputManager.ReadRarityLevelId("ID уровня редкости:");
+
+            Database.Artifacts.Add(new Artifact(assetName, rarityLevelId));
+            Console.WriteLine(ADD_SUCCESS);
+            Database.Save();
+        }
+
+        public static void AddCollectedArtifact()
+        {
+            if (!Database.PlayerSessions.Entries.Any())
+                throw new ConstraintException("Невозможно создать собранный артефакт, пока в базе данных нет сессий игроков.");
+            if (!Database.Artifacts.Entries.Any())
+                throw new ConstraintException("Невозможно создать собранный артефакт, пока в базе данных нет артефактов.");
+
+            ulong playerSessionId = InputManager.ReadPlayerSessionId("ID сессии игрока:");
+            byte artifactId = InputManager.ReadArtifactId("ID артефакта:");
+
+            Database.CollectedArtifacts.Add(new CollectedArtifact(playerSessionId, artifactId));
+            Console.WriteLine(ADD_SUCCESS);
+            Database.Save();
+        }
+
+        public static void AddEntity()
+        {
+            if (!Database.ExperienceLevels.Entries.Any())
+                throw new ConstraintException("Невозможно создать сущность, пока в базе данных нет уровней опыта.");
+
+            string assetName = InputManager.ReadString("Название ассета:");
+            float health = InputManager.ReadFloat("Здоровье:");
+            float movementSpeed = InputManager.ReadFloat("Скорость передвижения:");
+            byte requiredExperienceLevelId = InputManager.ReadExperienceLevelId("ID требуемого уровня опыта:");
+
+            Database.Entities.Add(new Entity(assetName, health, movementSpeed, requiredExperienceLevelId));
+            Console.WriteLine(ADD_SUCCESS);
+            Database.Save();
+        }
+
+        public static void AddExperienceLevel()
+        {
+            byte number = InputManager.ReadByte("Номер:");
+            ushort requiredExperiencePoints = InputManager.ReadUShort("Требуемый опыт:");
+
+            Database.ExperienceLevels.Add(new ExperienceLevel(number, requiredExperiencePoints));
+            Console.WriteLine(ADD_SUCCESS);
+            Database.Save();
+        }
+
+        public static void AddGameMode()
+        {
+            string assetName = InputManager.ReadString("Название ассета:");
+            bool isActive = InputManager.ReadBool("Активен:");
+            byte playerCount = InputManager.ReadByte("Количество игроков:");
+            float? timeLimit = InputManager.ReadNullableFloat("Лимит времени (в секундах):");
+
+            Database.GameModes.Add(new GameMode(assetName, isActive, playerCount, timeLimit));
+            Console.WriteLine(ADD_SUCCESS);
+            Database.Save();
+        }
+
+        public static void AddGameSession()
+        {
+            if (!Database.GameModes.Entries.Any())
+                throw new ConstraintException("Невозможно создать игровую сессию, пока в базе данных нет игровых режимов.");
+
+            ushort? serverId = InputManager.ReadNullableServerId("ID сервера:");
+            byte gameModeId = InputManager.ReadGameModeId("ID игрового режима:");
+
+            Database.GameSessions.Add(new GameSession(serverId, gameModeId));
+            Console.WriteLine(ADD_SUCCESS);
+            Database.Save();
+        }
+
+        public static void AddPlayer()
+        {
+            if (!Database.ExperienceLevels.Entries.Any())
+                throw new ConstraintException("Невозможно создать игрока, пока в базе данных нет уровней опыта.");
+
+            string username = InputManager.ReadString("Никнейм:");
+            string email = InputManager.ReadString("Email:");
+            string password = InputManager.ReadString("Пароль:");
+            bool enableDataCollection = InputManager.ReadBool("Сбор данных:");
+
+            Database.Players.Add(new Player(username, email, password, enableDataCollection));
+            Console.WriteLine(ADD_SUCCESS);
+            Database.Save();
+        }
+
+        public static void AddPlayerSession()
+        {
+            if (!Database.GameSessions.Entries.Any())
+                throw new ConstraintException("Невозможно создать сессию игрока, пока в базе данных нет игровых сессий.");
+            if (!Database.Players.Entries.Any())
+                throw new ConstraintException("Невозможно создать сессию игрока, пока в базе данных нет игроков.");
+
+            ulong gameSessionId = InputManager.ReadGameSessionId("ID игровой сессии:");
+            string playerId = InputManager.ReadPlayerId("ID игрока:");
+
+            Database.PlayerSessions.Add(new PlayerSession(gameSessionId, playerId));
+            Console.WriteLine(ADD_SUCCESS);
+            Database.Save();
+        }
+
+        public static void AddRarityLevel()
+        {
+            string assetName = InputManager.ReadString("Название ассета:");
+            float probability = InputManager.ReadFloat("Вероятность:");
+
+            Database.RarityLevels.Add(new RarityLevel(assetName, probability));
+            Console.WriteLine(ADD_SUCCESS);
+            Database.Save();
+        }
+
+        public static void AddServer()
+        {
+            string ipAddress = InputManager.ReadString("IP-адрес:");
+            ushort playerCapacity = InputManager.ReadUShort("Вместимость:");
+            bool isActive = InputManager.ReadBool("Активен:");
+
+            Database.Servers.Add(new Server(ipAddress, playerCapacity, isActive));
+            Console.WriteLine(ADD_SUCCESS);
+            Database.Save();
+        }
+
+        #endregion
+
+        #region Database Entry Editors
+
+        public static void EditAbility(byte id)
+        {
+            var ability = Database.Abilities.Get(id);
+
+            ability.AssetName = InputManager.ReadString($"Название ассета: {ability.AssetName} ->");
+            if (ability is ActivatedAbility activatedAbility)
+            {
+                activatedAbility.Duration = InputManager.ReadFloat($"Длительность: {activatedAbility.Duration} ->");
+                activatedAbility.Cooldown = InputManager.ReadFloat($"Восстановление: {activatedAbility.Cooldown} ->");
+
+                Database.Abilities.Edit(id, activatedAbility);
+            }
+            else
+            {
+                Database.Abilities.Edit(id, ability);
+            }
+
+            Console.WriteLine(EDIT_SUCCESS);
+            Database.Save();
+        }
+
+        public static void EditArtifact(byte id)
+        {
+            var artifact = Database.Artifacts.Get(id);
+
+            artifact.AssetName = InputManager.ReadString($"Название ассета: {artifact.AssetName} ->");
+            artifact.RarityLevelId = InputManager.ReadRarityLevelId($"ID уровня редкости: {artifact.RarityLevelId} ->");
+
+            Database.Artifacts.Edit(id, artifact);
+            Console.WriteLine(EDIT_SUCCESS);
+            Database.Save();
+        }
+
+        public static void EditEntity(byte id)
+        {
+            var entity = Database.Entities.Get(id);
+
+            entity.AssetName = InputManager.ReadString($"Название ассета: {entity.AssetName} ->");
+            entity.Health = InputManager.ReadFloat($"Здоровье: {entity.Health} ->");
+            entity.MovementSpeed = InputManager.ReadFloat($"Скорость передвижения: {entity.MovementSpeed} ->");
+            entity.RequiredExperienceLevelId = InputManager.ReadExperienceLevelId($"ID требуемого уровня опыта: {entity.RequiredExperienceLevelId} ->");
+
+            Database.Entities.Edit(id, entity);
+            Console.WriteLine(EDIT_SUCCESS);
+            Database.Save();
+        }
+
+        public static void EditExperienceLevel(byte id)
+        {
+            var experienceLevel = Database.ExperienceLevels.Get(id);
+
+            experienceLevel.RequiredExperiencePoints = InputManager.ReadUShort($"Требуемый опыт: {experienceLevel.RequiredExperiencePoints} ->");
+
+            Database.ExperienceLevels.Edit(id, experienceLevel);
+            Console.WriteLine(EDIT_SUCCESS);
+            Database.Save();
+        }
+
+        public static void EditGameMode(byte id)
+        {
+            var gameMode = Database.GameModes.Get(id);
+
+            gameMode.AssetName = InputManager.ReadString($"Название ассета: {gameMode.AssetName} ->");
+            gameMode.IsActive = InputManager.ReadBool($"Активен: {gameMode.IsActive} ->");
+            gameMode.PlayerCount = InputManager.ReadByte($"Количество игроков: {gameMode.PlayerCount} ->");
+            gameMode.TimeLimit = InputManager.ReadNullableFloat($"Лимит времени (в секундах): {gameMode.TimeLimit} ->");
+
+            Database.GameModes.Edit(id, gameMode);
+            Console.WriteLine(EDIT_SUCCESS);
+            Database.Save();
+        }
+
+        public static void EditGameSession(ulong id)
+        {
+            var gameSession = Database.GameSessions.Get(id);
+
+            gameSession.ServerId = InputManager.ReadNullableServerId($"ID сервера: {gameSession.ServerId} ->");
+            gameSession.GameModeId = InputManager.ReadGameModeId($"ID игрового режима: {gameSession.GameModeId} ->");
+            gameSession.EndDateTime = InputManager.ReadNullableDateTime($"Дата и время окончания: {gameSession.EndDateTime} ->");
+
+            Database.GameSessions.Edit(id, gameSession);
+            Console.WriteLine(EDIT_SUCCESS);
+            Database.Save();
+        }
+
+        public static void EditPlayer(string id)
+        {
+            var player = Database.Players.Get(id);
+
+            player.Username = InputManager.ReadString($"Никнейм: {player.Username} ->");
+            player.Email = InputManager.ReadString($"Email: {player.Email} ->");
+            player.Password = InputManager.ReadString($"Пароль: {player.Password} ->");
+            player.ExperienceLevelId = InputManager.ReadExperienceLevelId($"ID уровня опыта: {player.ExperienceLevelId} ->");
+            player.ExperiencePoints = InputManager.ReadUShort($"Опыт: {player.ExperiencePoints} ->");
+            player.AbilityPoints = InputManager.ReadByte($"Очки способностей: {player.AbilityPoints} ->");
+            player.IsOnline = InputManager.ReadBool($"В сети: {player.IsOnline} ->");
+            player.EnableDataCollection = InputManager.ReadBool($"Сбор данных: {player.EnableDataCollection} ->");
+
+            Database.Players.Edit(id, player);
+            Console.WriteLine(EDIT_SUCCESS);
+            Database.Save();
+        }
+
+        public static void EditPlayerSession(ulong id)
+        {
+            var playerSession = Database.PlayerSessions.Get(id);
+
+            if (playerSession.Player.EnableDataCollection == false)
+                throw new ArgumentException($"Сессия игрока {id} не подлежит редактированию, так как у игрока {playerSession.PlayerId}, связанного с ней, отключён сбор данных.");
+
+            playerSession.IsFinished = InputManager.ReadNullableBool($"Завершена: {playerSession.IsFinished} ->");
+            playerSession.IsWon = InputManager.ReadNullableBool($"Выиграна: {playerSession.IsWon} ->");
+            playerSession.TimeAlive = InputManager.ReadNullableFloat($"Время жизни (в секундах): {playerSession.TimeAlive} ->");
+            playerSession.PlayedAsEntity = InputManager.ReadNullableBool($"Использована сущность: {playerSession.PlayedAsEntity} ->");
+            playerSession.UsedEntityId = InputManager.ReadNullableEntityId($"ID использованной сущности: {playerSession.UsedEntityId} ->");
+
+            Database.PlayerSessions.Edit(id, playerSession);
+            Console.WriteLine(EDIT_SUCCESS);
+            Database.Save();
+        }
+
+        public static void EditRarityLevel(byte id)
+        {
+            var rarityLevel = Database.RarityLevels.Get(id);
+
+            rarityLevel.AssetName = InputManager.ReadString($"Название ассета: {rarityLevel.AssetName} ->");
+            rarityLevel.Probability = InputManager.ReadFloat($"Вероятность: {rarityLevel.Probability} ->");
+
+            Database.RarityLevels.Edit(id, rarityLevel);
+            Console.WriteLine(EDIT_SUCCESS);
+            Database.Save();
+        }
+
+        public static void EditServer(ushort id)
+        {
+            var server = Database.Servers.Get(id);
+
+            server.IpAddress = InputManager.ReadString($"IP-адрес: {server.IpAddress} ->");
+            server.PlayerCapacity = InputManager.ReadUShort($"Вместимость: {server.PlayerCapacity} ->");
+            server.IsActive = InputManager.ReadBool($"Активен: {server.IsActive} ->");
+            server.PlayerCount = InputManager.ReadUShort($"Количество игроков: {server.PlayerCount} ->");
+
+            Database.Servers.Edit(id, server);
+            Console.WriteLine(EDIT_SUCCESS);
+            Database.Save();
+        }
+
+        #endregion
+
+        #region Database Entry Removers
+
+        private static bool ConfirmRemoval() => InputManager.ReadBool("Данное действие невозможно отменить. Удалить указанную запись? ");
+
+        public static void RemoveAbility(byte id, bool force = false)
+        {
+            if (!force)
+            {
+                if (!ConfirmRemoval())
+                    return;
+            }
+
+            var ability = Database.Abilities.Get(id);
+
+            foreach (var acquiredAbility in ability.AcquiredAbilities)
+                RemoveAcquiredAbility((ulong) acquiredAbility.Id, true);
+
+            Database.Abilities.Remove(id);
+            Console.WriteLine(REMOVE_SUCCESS);
+            Database.Save();
+        }
+
+        public static void RemoveAcquiredAbility(ulong id, bool force = false)
+        {
+            if (!force)
+            {
+                if (!ConfirmRemoval())
+                    return;
+            }
+
+            var acquiredAbility = Database.AcquiredAbilities.Get(id);
+
+            var player = acquiredAbility.Player;
+            player.AbilityPoints++;
+            Database.Players.Edit(player.Id, player);
+
+            Database.AcquiredAbilities.Remove(id);
+            Console.WriteLine(REMOVE_SUCCESS);
+            Database.Save();
+        }
+
+        public static void RemoveArtifact(byte id, bool force = false)
+        {
+            if (!force)
+            {
+                if (!ConfirmRemoval())
+                    return;
+            }
+
+            var artifact = Database.Artifacts.Get(id);
+
+            foreach (var collectedArtifact in artifact.CollectedArtifacts)
+                RemoveCollectedArtifact((ulong) collectedArtifact.Id, true);
+
+            Database.Artifacts.Remove(id);
+            Console.WriteLine(REMOVE_SUCCESS);
+            Database.Save();
+        }
+
+        public static void RemoveCollectedArtifact(ulong id, bool force = false)
+        {
+            if (!force)
+            {
+                if (!ConfirmRemoval())
+                    return;
+            }
+
+            Database.CollectedArtifacts.Remove(id);
+            Console.WriteLine(REMOVE_SUCCESS);
+            Database.Save();
+        }
+
+        public static void RemoveEntity(byte id, bool force = false)
+        {
+            if (!force)
+            {
+                if (!ConfirmRemoval())
+                    return;
+            }
+
+            var entity = Database.Entities.Get(id);
+
+            foreach (var playerSession in entity.PlayerSessions)
+            {
+                playerSession.UsedEntityId = null;
+                Database.PlayerSessions.Edit(playerSession.Id, playerSession);
+            }
+
+            Database.Entities.Remove(id);
+            Console.WriteLine(REMOVE_SUCCESS);
+            Database.Save();
+        }
+
+        public static void RemoveExperienceLevel(byte id, bool force = false)
+        {
+            if (!force)
+            {
+                if (!ConfirmRemoval())
+                    return;
+            }
+
+            if (Database.ExperienceLevels.Entries.Count == 1 && (Database.Entities.Entries.Any() || Database.Players.Entries.Any()))
+                throw new ConstraintException("Невозможно удалить единственный уровень опыта, так как с ним связана одна или несколько сущностей и/или игроков.");
+
+            var experienceLevel = Database.ExperienceLevels.Get(id);
+
+            var experienceLevelIds = Database.ExperienceLevels.Entries.Select(experienceLevel => experienceLevel.Id).ToList();
+            int index = experienceLevelIds.IndexOf(id);
+            byte nextId = (byte) Database.ExperienceLevels.Entries.ElementAt(index + 1).Id;
+            byte previousId = (byte) Database.ExperienceLevels.Entries.ElementAt(index - 1).Id;
+
+            foreach (var entity in experienceLevel.RequiringEntities)
+            {
+                entity.RequiredExperienceLevelId = nextId;
+                Database.Entities.Edit(entity.Id, entity);
+            }
+
+            foreach (var player in experienceLevel.Players)
+            {
+                player.ExperienceLevelId = previousId;
+                Database.Players.Edit(player.Id, player);
+            }
+
+            Database.ExperienceLevels.Remove(id);
+            Console.WriteLine(REMOVE_SUCCESS);
+            Database.Save();
+        }
+
+        public static void RemoveGameMode(byte id, bool force = false)
+        {
+            if (!force)
+            {
+                if (!ConfirmRemoval())
+                    return;
+            }
+
+            var gameMode = Database.GameModes.Get(id);
+
+            if (gameMode.GameSessions.Any())
+                throw new ConstraintException("Невозможно удалить игровой режим, так как с ним связана одна или несколько игровых сессий.");
+
+            Database.GameModes.Remove(id);
+            Console.WriteLine(REMOVE_SUCCESS);
+            Database.Save();
+        }
+
+        public static void RemoveGameSession(ulong id, bool force = false)
+        {
+            if (!force)
+            {
+                if (!ConfirmRemoval())
+                    return;
+            }
+
+            var gameSession = Database.GameSessions.Get(id);
+
+            if (gameSession.PlayerSessions.Any())
+                throw new ConstraintException("Невозможно удалить игровую сессию, так как с ней связана одна или несколько сессий игроков.");
+
+            Database.GameSessions.Remove(id);
+            Console.WriteLine(REMOVE_SUCCESS);
+            Database.Save();
+        }
+
+        public static void RemovePlayer(string id, bool force = false)
+        {
+            if (!force)
+            {
+                if (!ConfirmRemoval())
+                    return;
+            }
+
+            var player = Database.Players.Get(id);
+
+            foreach (var acquiredAbility in player.AcquiredAbilities)
+                RemoveAcquiredAbility((ulong) acquiredAbility.Id, true);
+
+            foreach (var playerSession in player.PlayerSessions)
+                RemovePlayerSession((ulong) playerSession.Id, true);
+
+            Database.Players.Remove(id);
+            Console.WriteLine(REMOVE_SUCCESS);
+            Database.Save();
+        }
+
+        public static void RemovePlayerSession(ulong id, bool force = false)
+        {
+            if (!force)
+            {
+                if (!ConfirmRemoval())
+                    return;
+            }
+
+            var playerSession = Database.PlayerSessions.Get(id);
+
+            foreach (var collectedArtifact in playerSession.CollectedArtifacts)
+                RemoveCollectedArtifact((ulong) collectedArtifact.Id, true);
+
+            Database.PlayerSessions.Remove(id);
+            Console.WriteLine(REMOVE_SUCCESS);
+            Database.Save();
+        }
+
+        public static void RemoveRarityLevel(byte id, bool force = false)
+        {
+            if (!force)
+            {
+                if (!ConfirmRemoval())
+                    return;
+            }
+
+            if (Database.RarityLevels.Entries.Count == 1 && Database.Artifacts.Entries.Any())
+                throw new ConstraintException("Невозможно удалить единственный уровень редкости, так как к нему привязан один или несколько артефактов.");
+
+            var rarityLevel = Database.RarityLevels.Get(id);
+
+            var rarityLevelIds = Database.RarityLevels.Entries.Select(rarityLevel => rarityLevel.Id).ToList();
+            int index = rarityLevelIds.IndexOf(id);
+            byte nextId = (byte) Database.RarityLevels.Entries.ElementAt(index + 1).Id;
+
+            foreach (var artifact in rarityLevel.Artifacts)
+            {
+                artifact.RarityLevelId = nextId;
+                Database.Artifacts.Edit(artifact.Id, artifact);
+            }
+
+            Database.RarityLevels.Remove(id);
+            Console.WriteLine(REMOVE_SUCCESS);
+            Database.Save();
+        }
+
+        public static void RemoveServer(ushort id, bool force = false)
+        {
+            if (!force)
+            {
+                if (!ConfirmRemoval())
+                    return;
+            }
+
+            var server = Database.Servers.Get(id);
+
+            foreach (var gameSession in server.GameSessions)
+            {
+                gameSession.ServerId = null;
+                Database.GameSessions.Edit(gameSession.Id, gameSession);
+            }    
+
+            Database.Servers.Remove(id);
+            Console.WriteLine(REMOVE_SUCCESS);
+            Database.Save();
+        }
+
+        #endregion
+
+        private static void ExecuteUserCommand(string command, string[] arguments)
+        {
+            switch (command)
+            {
+                case "help":
+                    if (arguments.Length > 1)
+                        throw new FormatException(WRONG_ARGUMENT_COUNT_MESSAGE);
+                    else if (arguments.Length == 1)
+                        Help(arguments[0]);
+                    else
+                        Help();
+                    break;
+                case "tables":
+                    if (arguments.Length > 0)
+                        throw new FormatException(WRONG_ARGUMENT_COUNT_MESSAGE);
+                    else
+                        Tables();
+                    break;
+                case "view":
+                    if (arguments.Length == 0 || arguments.Length > 2)
+                        throw new FormatException(WRONG_ARGUMENT_COUNT_MESSAGE);
+                    else if (arguments.Length == 2)
+                        View(arguments[0], arguments[1]);
+                    else
+                        View(arguments[0]);
+                    break;
+                case "add":
+                    if (arguments.Length != 1)
+                        throw new FormatException(WRONG_ARGUMENT_COUNT_MESSAGE);
+                    else
+                        Add(arguments[0]);
+                    break;
+                case "edit":
+                    if (arguments.Length != 2)
+                        throw new FormatException(WRONG_ARGUMENT_COUNT_MESSAGE);
+                    else
+                        Edit(arguments[0], arguments[1]);
+                    break;
+                case "remove":
+                    if (arguments.Length != 2)
+                        throw new FormatException(WRONG_ARGUMENT_COUNT_MESSAGE);
+                    else
+                        Remove(arguments[0], arguments[1]);
+                    break;
+                case "exit":
+                    Exit();
+                    break;
+                default:
+                    throw new FormatException(UNKNOWN_COMMAND_MESSAGE);
+            }
+        }
+
         public static void Main(string[] args)
         {
-            Database.Load();
+            try
+            {
+                Database.Load();
+            }
+            catch (DataException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
 
             Console.WriteLine(string.Join("", Enumerable.Repeat("-", 65)));
             Console.WriteLine("Добро пожаловать в программу управления базой данных хоррор-игры!");
@@ -253,93 +889,47 @@ namespace HorrorGameDBManager
             Console.WriteLine();
 
             while (loop)
-                ExecuteUserCommand();
-
-            Database.Save();
-        }
-
-        private static void ExecuteUserCommand()
-        {
-            Console.Write("> ");
-            string? input = Console.ReadLine();
-            Console.WriteLine();
-
-            try
             {
+                Console.Write("> ");
+                string? input = Console.ReadLine();
+                Console.WriteLine();
+
                 if (string.IsNullOrEmpty(input))
                     throw new FormatException(EMPTY_COMMAND_MESSAGE);
 
-                string[] parts = input.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-                string command = parts[0];
-                string[] args = parts.Length > 1 ? parts[1..parts.Length] : Array.Empty<string>();
+                string[] words = input.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+                string command = words[0];
+                string[] arguments = words.Length > 1 ? words[1..words.Length] : Array.Empty<string>();
 
-                switch (command)
+                try
                 {
-                    case "help":
-                        if (args.Length > 1)
-                            throw new FormatException(WRONG_ARGUMENT_COUNT_MESSAGE);
-                        else if (args.Length == 1)
-                            Help(args[0]);
-                        else
-                            Help();
-                        break;
-                    case "tables":
-                        if (args.Length > 0)
-                            throw new FormatException(WRONG_ARGUMENT_COUNT_MESSAGE);
-                        else
-                            Tables();
-                        break;
-                    case "view":
-                        if (args.Length == 0 || args.Length > 2)
-                            throw new FormatException(WRONG_ARGUMENT_COUNT_MESSAGE);
-                        else if (args.Length == 2)
-                            View(args[0], args[1]);
-                        else
-                            View(args[0]);
-                        break;
-                    case "add":
-                        if (args.Length != 1)
-                            throw new FormatException(WRONG_ARGUMENT_COUNT_MESSAGE);
-                        else
-                            Add(args[0]);
-                        break;
-                    case "edit":
-                        if (args.Length != 2)
-                            throw new FormatException(WRONG_ARGUMENT_COUNT_MESSAGE);
-                        else
-                            Edit(args[0], args[1]);
-                        break;
-                    case "remove":
-                        if (args.Length != 2)
-                            throw new FormatException(WRONG_ARGUMENT_COUNT_MESSAGE);
-                        else
-                            Remove(args[0], args[1]);
-                        break;
-                    case "exit":
-                        Exit();
-                        break;
-                    default:
-                        throw new FormatException(UNKNOWN_COMMAND_MESSAGE);
+                    ExecuteUserCommand(command, arguments);
                 }
-            }
-            catch (ArgumentException ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-            catch (FormatException ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-            catch (ConstraintException ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Произошла непредвиденная ошибка.\n{ex.Message}\n{ex.StackTrace}");
+                catch (ArgumentException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+                catch (FormatException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+                catch (ConstraintException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+                catch (DataException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Произошла непредвиденная ошибка.\n{ex.Message}\n{ex.StackTrace}");
+                }
+
+                Console.WriteLine();
             }
 
-            Console.WriteLine();
+            Database.Save();
         }
     }
 }

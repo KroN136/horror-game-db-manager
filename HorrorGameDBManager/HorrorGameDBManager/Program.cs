@@ -511,11 +511,6 @@ namespace HorrorGameDBManager
             gameSession.GameModeId = IdReader.ReadGameModeId($"ID игрового режима: {gameSession.GameModeId} ->");
             gameSession.EndDateTime = ValueReader.ReadNullableDateTime($"Дата и время окончания: {gameSession.EndDateTime} ->");
 
-            byte gameModeId = IdReader.ReadGameModeId("ID игрового режима:");
-
-            if (Database.GameModes.Get(gameModeId).IsActive == false)
-                throw new ConstraintException("Невозможно создать игровую сессию: указанный игровой режим не активен.");
-
             Database.GameSessions.Edit(id, gameSession);
             Console.WriteLine(EDIT_SUCCESS);
             Database.Save();

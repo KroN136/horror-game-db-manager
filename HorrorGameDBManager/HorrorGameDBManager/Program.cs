@@ -258,12 +258,12 @@ namespace HorrorGameDBManager
 
         public static void AddAbility()
         {
-            bool activatedAbility = InputManager.ReadBool("Активируемая способность?");
-            string assetName = InputManager.ReadString("Название ассета:");
+            bool activatedAbility = ValueReader.ReadBool("Активируемая способность?");
+            string assetName = ValueReader.ReadString("Название ассета:");
             if (activatedAbility)
             {
-                float duration = InputManager.ReadFloat("Длительность:");
-                float cooldown = InputManager.ReadFloat("Восстановление:");
+                float duration = ValueReader.ReadFloat("Длительность:");
+                float cooldown = ValueReader.ReadFloat("Восстановление:");
 
                 Database.Abilities.Add(new ActivatedAbility(assetName, duration, cooldown));
             }
@@ -283,8 +283,8 @@ namespace HorrorGameDBManager
             if (!Database.Abilities.Entries.Any())
                 throw new ConstraintException("Невозможно создать приобретённую способность, пока в базе данных нет способностей.");
 
-            string playerId = InputManager.ReadPlayerId("ID игрока:");
-            byte abilityId = InputManager.ReadAbilityId("ID способности:");
+            string playerId = IdReader.ReadPlayerId("ID игрока:");
+            byte abilityId = IdReader.ReadAbilityId("ID способности:");
 
             Database.AcquiredAbilities.Add(new AcquiredAbility(playerId, abilityId));
             Console.WriteLine(ADD_SUCCESS);
@@ -296,8 +296,8 @@ namespace HorrorGameDBManager
             if (!Database.RarityLevels.Entries.Any())
                 throw new ConstraintException("Невозможно создать артефакт, пока в базе данных нет уровней редкости.");
 
-            string assetName = InputManager.ReadString("Название ассета:");
-            byte rarityLevelId = InputManager.ReadRarityLevelId("ID уровня редкости:");
+            string assetName = ValueReader.ReadString("Название ассета:");
+            byte rarityLevelId = IdReader.ReadRarityLevelId("ID уровня редкости:");
 
             Database.Artifacts.Add(new Artifact(assetName, rarityLevelId));
             Console.WriteLine(ADD_SUCCESS);
@@ -311,8 +311,8 @@ namespace HorrorGameDBManager
             if (!Database.Artifacts.Entries.Any())
                 throw new ConstraintException("Невозможно создать собранный артефакт, пока в базе данных нет артефактов.");
 
-            ulong playerSessionId = InputManager.ReadPlayerSessionId("ID сессии игрока:");
-            byte artifactId = InputManager.ReadArtifactId("ID артефакта:");
+            ulong playerSessionId = IdReader.ReadPlayerSessionId("ID сессии игрока:");
+            byte artifactId = IdReader.ReadArtifactId("ID артефакта:");
 
             Database.CollectedArtifacts.Add(new CollectedArtifact(playerSessionId, artifactId));
             Console.WriteLine(ADD_SUCCESS);
@@ -324,10 +324,10 @@ namespace HorrorGameDBManager
             if (!Database.ExperienceLevels.Entries.Any())
                 throw new ConstraintException("Невозможно создать сущность, пока в базе данных нет уровней опыта.");
 
-            string assetName = InputManager.ReadString("Название ассета:");
-            float health = InputManager.ReadFloat("Здоровье:");
-            float movementSpeed = InputManager.ReadFloat("Скорость передвижения:");
-            byte requiredExperienceLevelId = InputManager.ReadExperienceLevelId("ID требуемого уровня опыта:");
+            string assetName = ValueReader.ReadString("Название ассета:");
+            float health = ValueReader.ReadFloat("Здоровье:");
+            float movementSpeed = ValueReader.ReadFloat("Скорость передвижения:");
+            byte requiredExperienceLevelId = IdReader.ReadExperienceLevelId("ID требуемого уровня опыта:");
 
             Database.Entities.Add(new Entity(assetName, health, movementSpeed, requiredExperienceLevelId));
             Console.WriteLine(ADD_SUCCESS);
@@ -336,8 +336,8 @@ namespace HorrorGameDBManager
 
         public static void AddExperienceLevel()
         {
-            byte number = InputManager.ReadByte("Номер:");
-            ushort requiredExperiencePoints = InputManager.ReadUShort("Требуемый опыт:");
+            byte number = ValueReader.ReadByte("Номер:");
+            ushort requiredExperiencePoints = ValueReader.ReadUShort("Требуемый опыт:");
 
             Database.ExperienceLevels.Add(new ExperienceLevel(number, requiredExperiencePoints));
             Console.WriteLine(ADD_SUCCESS);
@@ -346,10 +346,10 @@ namespace HorrorGameDBManager
 
         public static void AddGameMode()
         {
-            string assetName = InputManager.ReadString("Название ассета:");
-            bool isActive = InputManager.ReadBool("Активен:");
-            byte playerCount = InputManager.ReadByte("Количество игроков:");
-            float? timeLimit = InputManager.ReadNullableFloat("Лимит времени (в секундах):");
+            string assetName = ValueReader.ReadString("Название ассета:");
+            bool isActive = ValueReader.ReadBool("Активен:");
+            byte playerCount = ValueReader.ReadByte("Количество игроков:");
+            float? timeLimit = ValueReader.ReadNullableFloat("Лимит времени (в секундах):");
 
             Database.GameModes.Add(new GameMode(assetName, isActive, playerCount, timeLimit));
             Console.WriteLine(ADD_SUCCESS);
@@ -361,8 +361,15 @@ namespace HorrorGameDBManager
             if (!Database.GameModes.Entries.Any())
                 throw new ConstraintException("Невозможно создать игровую сессию, пока в базе данных нет игровых режимов.");
 
-            ushort? serverId = InputManager.ReadNullableServerId("ID сервера:");
-            byte gameModeId = InputManager.ReadGameModeId("ID игрового режима:");
+            ushort? serverId = IdReader.ReadNullableServerId("ID сервера:");
+
+            if (serverId.HasValue && Database.Servers.Get(serverId.Value).IsActive == false)
+                throw new ConstraintException("Невозможно создать игровую сессию: указанный сервер не активен.");
+
+            byte gameModeId = IdReader.ReadGameModeId("ID игрового режима:");
+
+            if (Database.GameModes.Get(gameModeId).IsActive == false)
+                throw new ConstraintException("Невозможно создать игровую сессию: указанный игровой режим не активен.");
 
             Database.GameSessions.Add(new GameSession(serverId, gameModeId));
             Console.WriteLine(ADD_SUCCESS);
@@ -374,10 +381,10 @@ namespace HorrorGameDBManager
             if (!Database.ExperienceLevels.Entries.Any())
                 throw new ConstraintException("Невозможно создать игрока, пока в базе данных нет уровней опыта.");
 
-            string username = InputManager.ReadString("Никнейм:");
-            string email = InputManager.ReadString("Email:");
-            string password = InputManager.ReadString("Пароль:");
-            bool enableDataCollection = InputManager.ReadBool("Сбор данных:");
+            string username = ValueReader.ReadString("Никнейм:");
+            string email = ValueReader.ReadString("Email:");
+            string password = ValueReader.ReadString("Пароль:");
+            bool enableDataCollection = ValueReader.ReadBool("Сбор данных:");
 
             Database.Players.Add(new Player(username, email, password, enableDataCollection));
             Console.WriteLine(ADD_SUCCESS);
@@ -391,8 +398,8 @@ namespace HorrorGameDBManager
             if (!Database.Players.Entries.Any())
                 throw new ConstraintException("Невозможно создать сессию игрока, пока в базе данных нет игроков.");
 
-            ulong gameSessionId = InputManager.ReadGameSessionId("ID игровой сессии:");
-            string playerId = InputManager.ReadPlayerId("ID игрока:");
+            ulong gameSessionId = IdReader.ReadGameSessionId("ID игровой сессии:");
+            string playerId = IdReader.ReadPlayerId("ID игрока:");
 
             Database.PlayerSessions.Add(new PlayerSession(gameSessionId, playerId));
             Console.WriteLine(ADD_SUCCESS);
@@ -401,8 +408,8 @@ namespace HorrorGameDBManager
 
         public static void AddRarityLevel()
         {
-            string assetName = InputManager.ReadString("Название ассета:");
-            float probability = InputManager.ReadFloat("Вероятность:");
+            string assetName = ValueReader.ReadString("Название ассета:");
+            float probability = ValueReader.ReadFloat("Вероятность:");
 
             Database.RarityLevels.Add(new RarityLevel(assetName, probability));
             Console.WriteLine(ADD_SUCCESS);
@@ -411,9 +418,9 @@ namespace HorrorGameDBManager
 
         public static void AddServer()
         {
-            string ipAddress = InputManager.ReadString("IP-адрес:");
-            ushort playerCapacity = InputManager.ReadUShort("Вместимость:");
-            bool isActive = InputManager.ReadBool("Активен:");
+            string ipAddress = ValueReader.ReadString("IP-адрес:");
+            ushort playerCapacity = ValueReader.ReadUShort("Вместимость:");
+            bool isActive = ValueReader.ReadBool("Активен:");
 
             Database.Servers.Add(new Server(ipAddress, playerCapacity, isActive));
             Console.WriteLine(ADD_SUCCESS);
@@ -428,11 +435,11 @@ namespace HorrorGameDBManager
         {
             var ability = Database.Abilities.Get(id);
 
-            ability.AssetName = InputManager.ReadString($"Название ассета: {ability.AssetName} ->");
+            ability.AssetName = ValueReader.ReadString($"Название ассета: {ability.AssetName} ->");
             if (ability is ActivatedAbility activatedAbility)
             {
-                activatedAbility.Duration = InputManager.ReadFloat($"Длительность: {activatedAbility.Duration} ->");
-                activatedAbility.Cooldown = InputManager.ReadFloat($"Восстановление: {activatedAbility.Cooldown} ->");
+                activatedAbility.Duration = ValueReader.ReadFloat($"Длительность: {activatedAbility.Duration} ->");
+                activatedAbility.Cooldown = ValueReader.ReadFloat($"Восстановление: {activatedAbility.Cooldown} ->");
 
                 Database.Abilities.Edit(id, activatedAbility);
             }
@@ -449,8 +456,8 @@ namespace HorrorGameDBManager
         {
             var artifact = Database.Artifacts.Get(id);
 
-            artifact.AssetName = InputManager.ReadString($"Название ассета: {artifact.AssetName} ->");
-            artifact.RarityLevelId = InputManager.ReadRarityLevelId($"ID уровня редкости: {artifact.RarityLevelId} ->");
+            artifact.AssetName = ValueReader.ReadString($"Название ассета: {artifact.AssetName} ->");
+            artifact.RarityLevelId = IdReader.ReadRarityLevelId($"ID уровня редкости: {artifact.RarityLevelId} ->");
 
             Database.Artifacts.Edit(id, artifact);
             Console.WriteLine(EDIT_SUCCESS);
@@ -461,10 +468,10 @@ namespace HorrorGameDBManager
         {
             var entity = Database.Entities.Get(id);
 
-            entity.AssetName = InputManager.ReadString($"Название ассета: {entity.AssetName} ->");
-            entity.Health = InputManager.ReadFloat($"Здоровье: {entity.Health} ->");
-            entity.MovementSpeed = InputManager.ReadFloat($"Скорость передвижения: {entity.MovementSpeed} ->");
-            entity.RequiredExperienceLevelId = InputManager.ReadExperienceLevelId($"ID требуемого уровня опыта: {entity.RequiredExperienceLevelId} ->");
+            entity.AssetName = ValueReader.ReadString($"Название ассета: {entity.AssetName} ->");
+            entity.Health = ValueReader.ReadFloat($"Здоровье: {entity.Health} ->");
+            entity.MovementSpeed = ValueReader.ReadFloat($"Скорость передвижения: {entity.MovementSpeed} ->");
+            entity.RequiredExperienceLevelId = IdReader.ReadExperienceLevelId($"ID требуемого уровня опыта: {entity.RequiredExperienceLevelId} ->");
 
             Database.Entities.Edit(id, entity);
             Console.WriteLine(EDIT_SUCCESS);
@@ -475,7 +482,7 @@ namespace HorrorGameDBManager
         {
             var experienceLevel = Database.ExperienceLevels.Get(id);
 
-            experienceLevel.RequiredExperiencePoints = InputManager.ReadUShort($"Требуемый опыт: {experienceLevel.RequiredExperiencePoints} ->");
+            experienceLevel.RequiredExperiencePoints = ValueReader.ReadUShort($"Требуемый опыт: {experienceLevel.RequiredExperiencePoints} ->");
 
             Database.ExperienceLevels.Edit(id, experienceLevel);
             Console.WriteLine(EDIT_SUCCESS);
@@ -486,10 +493,10 @@ namespace HorrorGameDBManager
         {
             var gameMode = Database.GameModes.Get(id);
 
-            gameMode.AssetName = InputManager.ReadString($"Название ассета: {gameMode.AssetName} ->");
-            gameMode.IsActive = InputManager.ReadBool($"Активен: {gameMode.IsActive} ->");
-            gameMode.PlayerCount = InputManager.ReadByte($"Количество игроков: {gameMode.PlayerCount} ->");
-            gameMode.TimeLimit = InputManager.ReadNullableFloat($"Лимит времени (в секундах): {gameMode.TimeLimit} ->");
+            gameMode.AssetName = ValueReader.ReadString($"Название ассета: {gameMode.AssetName} ->");
+            gameMode.IsActive = ValueReader.ReadBool($"Активен: {gameMode.IsActive} ->");
+            gameMode.PlayerCount = ValueReader.ReadByte($"Количество игроков: {gameMode.PlayerCount} ->");
+            gameMode.TimeLimit = ValueReader.ReadNullableFloat($"Лимит времени (в секундах): {gameMode.TimeLimit} ->");
 
             Database.GameModes.Edit(id, gameMode);
             Console.WriteLine(EDIT_SUCCESS);
@@ -500,9 +507,14 @@ namespace HorrorGameDBManager
         {
             var gameSession = Database.GameSessions.Get(id);
 
-            gameSession.ServerId = InputManager.ReadNullableServerId($"ID сервера: {gameSession.ServerId} ->");
-            gameSession.GameModeId = InputManager.ReadGameModeId($"ID игрового режима: {gameSession.GameModeId} ->");
-            gameSession.EndDateTime = InputManager.ReadNullableDateTime($"Дата и время окончания: {gameSession.EndDateTime} ->");
+            gameSession.ServerId = IdReader.ReadNullableServerId($"ID сервера: {gameSession.ServerId} ->");
+            gameSession.GameModeId = IdReader.ReadGameModeId($"ID игрового режима: {gameSession.GameModeId} ->");
+            gameSession.EndDateTime = ValueReader.ReadNullableDateTime($"Дата и время окончания: {gameSession.EndDateTime} ->");
+
+            byte gameModeId = IdReader.ReadGameModeId("ID игрового режима:");
+
+            if (Database.GameModes.Get(gameModeId).IsActive == false)
+                throw new ConstraintException("Невозможно создать игровую сессию: указанный игровой режим не активен.");
 
             Database.GameSessions.Edit(id, gameSession);
             Console.WriteLine(EDIT_SUCCESS);
@@ -513,14 +525,14 @@ namespace HorrorGameDBManager
         {
             var player = Database.Players.Get(id);
 
-            player.Username = InputManager.ReadString($"Никнейм: {player.Username} ->");
-            player.Email = InputManager.ReadString($"Email: {player.Email} ->");
-            player.Password = InputManager.ReadString($"Пароль: {player.Password} ->");
-            player.ExperienceLevelId = InputManager.ReadExperienceLevelId($"ID уровня опыта: {player.ExperienceLevelId} ->");
-            player.ExperiencePoints = InputManager.ReadUShort($"Опыт: {player.ExperiencePoints} ->");
-            player.AbilityPoints = InputManager.ReadByte($"Очки способностей: {player.AbilityPoints} ->");
-            player.IsOnline = InputManager.ReadBool($"В сети: {player.IsOnline} ->");
-            player.EnableDataCollection = InputManager.ReadBool($"Сбор данных: {player.EnableDataCollection} ->");
+            player.Username = ValueReader.ReadString($"Никнейм: {player.Username} ->");
+            player.Email = ValueReader.ReadString($"Email: {player.Email} ->");
+            player.Password = ValueReader.ReadString($"Пароль: {player.Password} ->");
+            player.ExperienceLevelId = IdReader.ReadExperienceLevelId($"ID уровня опыта: {player.ExperienceLevelId} ->");
+            player.ExperiencePoints = ValueReader.ReadUShort($"Опыт: {player.ExperiencePoints} ->");
+            player.AbilityPoints = ValueReader.ReadByte($"Очки способностей: {player.AbilityPoints} ->");
+            player.IsOnline = ValueReader.ReadBool($"В сети: {player.IsOnline} ->");
+            player.EnableDataCollection = ValueReader.ReadBool($"Сбор данных: {player.EnableDataCollection} ->");
 
             Database.Players.Edit(id, player);
             Console.WriteLine(EDIT_SUCCESS);
@@ -534,11 +546,11 @@ namespace HorrorGameDBManager
             if (playerSession.Player.EnableDataCollection == false)
                 throw new ArgumentException($"Сессия игрока {id} не подлежит редактированию, так как у игрока {playerSession.PlayerId}, связанного с ней, отключён сбор данных.");
 
-            playerSession.IsFinished = InputManager.ReadNullableBool($"Завершена: {playerSession.IsFinished} ->");
-            playerSession.IsWon = InputManager.ReadNullableBool($"Выиграна: {playerSession.IsWon} ->");
-            playerSession.TimeAlive = InputManager.ReadNullableFloat($"Время жизни (в секундах): {playerSession.TimeAlive} ->");
-            playerSession.PlayedAsEntity = InputManager.ReadNullableBool($"Использована сущность: {playerSession.PlayedAsEntity} ->");
-            playerSession.UsedEntityId = InputManager.ReadNullableEntityId($"ID использованной сущности: {playerSession.UsedEntityId} ->");
+            playerSession.IsFinished = ValueReader.ReadNullableBool($"Завершена: {playerSession.IsFinished} ->");
+            playerSession.IsWon = ValueReader.ReadNullableBool($"Выиграна: {playerSession.IsWon} ->");
+            playerSession.TimeAlive = ValueReader.ReadNullableFloat($"Время жизни (в секундах): {playerSession.TimeAlive} ->");
+            playerSession.PlayedAsEntity = ValueReader.ReadNullableBool($"Использована сущность: {playerSession.PlayedAsEntity} ->");
+            playerSession.UsedEntityId = IdReader.ReadNullableEntityId($"ID использованной сущности: {playerSession.UsedEntityId} ->");
 
             Database.PlayerSessions.Edit(id, playerSession);
             Console.WriteLine(EDIT_SUCCESS);
@@ -549,8 +561,8 @@ namespace HorrorGameDBManager
         {
             var rarityLevel = Database.RarityLevels.Get(id);
 
-            rarityLevel.AssetName = InputManager.ReadString($"Название ассета: {rarityLevel.AssetName} ->");
-            rarityLevel.Probability = InputManager.ReadFloat($"Вероятность: {rarityLevel.Probability} ->");
+            rarityLevel.AssetName = ValueReader.ReadString($"Название ассета: {rarityLevel.AssetName} ->");
+            rarityLevel.Probability = ValueReader.ReadFloat($"Вероятность: {rarityLevel.Probability} ->");
 
             Database.RarityLevels.Edit(id, rarityLevel);
             Console.WriteLine(EDIT_SUCCESS);
@@ -561,10 +573,10 @@ namespace HorrorGameDBManager
         {
             var server = Database.Servers.Get(id);
 
-            server.IpAddress = InputManager.ReadString($"IP-адрес: {server.IpAddress} ->");
-            server.PlayerCapacity = InputManager.ReadUShort($"Вместимость: {server.PlayerCapacity} ->");
-            server.IsActive = InputManager.ReadBool($"Активен: {server.IsActive} ->");
-            server.PlayerCount = InputManager.ReadUShort($"Количество игроков: {server.PlayerCount} ->");
+            server.IpAddress = ValueReader.ReadString($"IP-адрес: {server.IpAddress} ->");
+            server.PlayerCapacity = ValueReader.ReadUShort($"Вместимость: {server.PlayerCapacity} ->");
+            server.IsActive = ValueReader.ReadBool($"Активен: {server.IsActive} ->");
+            server.PlayerCount = ValueReader.ReadUShort($"Количество игроков: {server.PlayerCount} ->");
 
             Database.Servers.Edit(id, server);
             Console.WriteLine(EDIT_SUCCESS);
@@ -575,7 +587,7 @@ namespace HorrorGameDBManager
 
         #region Database Entry Removers
 
-        private static bool ConfirmRemoval() => InputManager.ReadBool("Данное действие невозможно отменить. Удалить указанную запись? ");
+        private static bool ConfirmRemoval() => ValueReader.ReadBool("Данное действие невозможно отменить. Удалить указанную запись? ");
 
         public static void RemoveAbility(byte id, bool force = false)
         {

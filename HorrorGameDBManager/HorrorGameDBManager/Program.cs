@@ -909,15 +909,15 @@ namespace HorrorGameDBManager
                 string? input = Console.ReadLine();
                 Console.WriteLine();
 
-                if (string.IsNullOrEmpty(input))
-                    throw new FormatException(EMPTY_COMMAND_MESSAGE);
-
-                string[] words = input.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-                string command = words.First();
-                string[] arguments = words.Length > 1 ? words[1..words.Length] : Array.Empty<string>();
-
                 try
                 {
+                    if (string.IsNullOrEmpty(input))
+                        throw new FormatException(EMPTY_COMMAND_MESSAGE);
+
+                    string[] words = input.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+                    string command = words.First();
+                    string[] arguments = words.Length > 1 ? words[1..words.Length] : Array.Empty<string>();
+                
                     ExecuteUserCommand(command, arguments);
                 }
                 catch (Exception ex)

@@ -67,6 +67,12 @@ namespace HorrorGameDBManager
 
         public static void Load()
         {
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+                return;
+            }
+
             LoadTable(Abilities);
             LoadTable(AcquiredAbilities);
             LoadTable(Artifacts);

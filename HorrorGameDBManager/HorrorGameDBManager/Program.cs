@@ -681,27 +681,10 @@ namespace HorrorGameDBManager
                     return;
             }
 
-            if (Database.ExperienceLevels.Entries.Count == 1 && (Database.Entities.Entries.Any() || Database.Players.Entries.Any()))
-                throw new ConstraintException("Невозможно удалить единственный уровень опыта, так как с ним связана одна или несколько сущностей и/или игроков.");
-
             var experienceLevel = Database.ExperienceLevels.Get(id);
 
-            var experienceLevelIds = Database.ExperienceLevels.Entries.Select(experienceLevel => experienceLevel.Id).ToList();
-            int index = experienceLevelIds.IndexOf(id);
-            byte nextId = (byte) Database.ExperienceLevels.Entries.ElementAt(index + 1).Id;
-            byte previousId = (byte) Database.ExperienceLevels.Entries.ElementAt(index - 1).Id;
-
-            foreach (var entity in experienceLevel.RequiringEntities)
-            {
-                entity.RequiredExperienceLevelId = nextId;
-                Database.Entities.Edit(entity.Id, entity);
-            }
-
-            foreach (var player in experienceLevel.Players)
-            {
-                player.ExperienceLevelId = previousId;
-                Database.Players.Edit(player.Id, player);
-            }
+            if (experienceLevel.RequiringEntities.Any() || experienceLevel.Players.Any())
+                throw new ConstraintException("Невозможно удалить уровень опыта, так как с ним связана одна или несколько сущностей и/или игроков.");
 
             Database.ExperienceLevels.Remove(id);
             Console.WriteLine(REMOVE_SUCCESS);

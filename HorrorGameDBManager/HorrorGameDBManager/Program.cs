@@ -262,8 +262,8 @@ namespace HorrorGameDBManager
             string assetName = ValueReader.ReadString("Название ассета:");
             if (activatedAbility)
             {
-                float duration = ValueReader.ReadFloat("Длительность:");
-                float cooldown = ValueReader.ReadFloat("Восстановление:");
+                float duration = ValueReader.ReadNonNegativeFloat("Длительность:");
+                float cooldown = ValueReader.ReadNonNegativeFloat("Восстановление:");
 
                 Database.Abilities.Add(new ActivatedAbility(assetName, duration, cooldown));
             }
@@ -325,8 +325,8 @@ namespace HorrorGameDBManager
                 throw new ConstraintException("Невозможно создать сущность, пока в базе данных нет уровней опыта.");
 
             string assetName = ValueReader.ReadString("Название ассета:");
-            float health = ValueReader.ReadFloat("Здоровье:");
-            float movementSpeed = ValueReader.ReadFloat("Скорость передвижения:");
+            float health = ValueReader.ReadNonNegativeFloat("Здоровье:");
+            float movementSpeed = ValueReader.ReadNonNegativeFloat("Скорость передвижения:");
             byte requiredExperienceLevelId = IdReader.ReadExperienceLevelId("ID требуемого уровня опыта:");
 
             Database.Entities.Add(new Entity(assetName, health, movementSpeed, requiredExperienceLevelId));
@@ -349,7 +349,7 @@ namespace HorrorGameDBManager
             string assetName = ValueReader.ReadString("Название ассета:");
             bool isActive = ValueReader.ReadBool("Активен:");
             byte playerCount = ValueReader.ReadByte("Количество игроков:");
-            float? timeLimit = ValueReader.ReadNullableFloat("Лимит времени (в секундах):");
+            float? timeLimit = ValueReader.ReadNonNegativeNullableFloat("Лимит времени (в секундах):");
 
             Database.GameModes.Add(new GameMode(assetName, isActive, playerCount, timeLimit));
             Console.WriteLine(ADD_SUCCESS);
@@ -409,7 +409,7 @@ namespace HorrorGameDBManager
         public static void AddRarityLevel()
         {
             string assetName = ValueReader.ReadString("Название ассета:");
-            float probability = ValueReader.ReadFloat("Вероятность:");
+            float probability = ValueReader.ReadNonNegativeFloat("Вероятность:");
 
             Database.RarityLevels.Add(new RarityLevel(assetName, probability));
             Console.WriteLine(ADD_SUCCESS);
@@ -438,8 +438,8 @@ namespace HorrorGameDBManager
             ability.AssetName = ValueReader.ReadString($"Название ассета: {ability.AssetName} ->");
             if (ability is ActivatedAbility activatedAbility)
             {
-                activatedAbility.Duration = ValueReader.ReadFloat($"Длительность: {activatedAbility.Duration} ->");
-                activatedAbility.Cooldown = ValueReader.ReadFloat($"Восстановление: {activatedAbility.Cooldown} ->");
+                activatedAbility.Duration = ValueReader.ReadNonNegativeFloat($"Длительность: {activatedAbility.Duration} ->");
+                activatedAbility.Cooldown = ValueReader.ReadNonNegativeFloat($"Восстановление: {activatedAbility.Cooldown} ->");
 
                 Database.Abilities.Edit(id, activatedAbility);
             }
@@ -469,8 +469,8 @@ namespace HorrorGameDBManager
             var entity = Database.Entities.Get(id);
 
             entity.AssetName = ValueReader.ReadString($"Название ассета: {entity.AssetName} ->");
-            entity.Health = ValueReader.ReadFloat($"Здоровье: {entity.Health} ->");
-            entity.MovementSpeed = ValueReader.ReadFloat($"Скорость передвижения: {entity.MovementSpeed} ->");
+            entity.Health = ValueReader.ReadNonNegativeFloat($"Здоровье: {entity.Health} ->");
+            entity.MovementSpeed = ValueReader.ReadNonNegativeFloat($"Скорость передвижения: {entity.MovementSpeed} ->");
             entity.RequiredExperienceLevelId = IdReader.ReadExperienceLevelId($"ID требуемого уровня опыта: {entity.RequiredExperienceLevelId} ->");
 
             Database.Entities.Edit(id, entity);
@@ -496,7 +496,7 @@ namespace HorrorGameDBManager
             gameMode.AssetName = ValueReader.ReadString($"Название ассета: {gameMode.AssetName} ->");
             gameMode.IsActive = ValueReader.ReadBool($"Активен: {gameMode.IsActive} ->");
             gameMode.PlayerCount = ValueReader.ReadByte($"Количество игроков: {gameMode.PlayerCount} ->");
-            gameMode.TimeLimit = ValueReader.ReadNullableFloat($"Лимит времени (в секундах): {gameMode.TimeLimit} ->");
+            gameMode.TimeLimit = ValueReader.ReadNonNegativeNullableFloat($"Лимит времени (в секундах): {gameMode.TimeLimit} ->");
 
             Database.GameModes.Edit(id, gameMode);
             Console.WriteLine(EDIT_SUCCESS);
@@ -543,7 +543,7 @@ namespace HorrorGameDBManager
 
             playerSession.IsFinished = ValueReader.ReadNullableBool($"Завершена: {playerSession.IsFinished} ->");
             playerSession.IsWon = ValueReader.ReadNullableBool($"Выиграна: {playerSession.IsWon} ->");
-            playerSession.TimeAlive = ValueReader.ReadNullableFloat($"Время жизни (в секундах): {playerSession.TimeAlive} ->");
+            playerSession.TimeAlive = ValueReader.ReadNonNegativeNullableFloat($"Время жизни (в секундах): {playerSession.TimeAlive} ->");
             playerSession.PlayedAsEntity = ValueReader.ReadNullableBool($"Использована сущность: {playerSession.PlayedAsEntity} ->");
             playerSession.UsedEntityId = IdReader.ReadNullableEntityId($"ID использованной сущности: {playerSession.UsedEntityId} ->");
 
@@ -557,7 +557,7 @@ namespace HorrorGameDBManager
             var rarityLevel = Database.RarityLevels.Get(id);
 
             rarityLevel.AssetName = ValueReader.ReadString($"Название ассета: {rarityLevel.AssetName} ->");
-            rarityLevel.Probability = ValueReader.ReadFloat($"Вероятность: {rarityLevel.Probability} ->");
+            rarityLevel.Probability = ValueReader.ReadNonNegativeFloat($"Вероятность: {rarityLevel.Probability} ->");
 
             Database.RarityLevels.Edit(id, rarityLevel);
             Console.WriteLine(EDIT_SUCCESS);

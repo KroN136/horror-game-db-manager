@@ -169,6 +169,22 @@
             return output;
         }
 
+        public static float ReadNonNegativeFloat(string message, string errorMessage = "Введите значение типа float, больше или равное 0.")
+        {
+            float output;
+            while (true)
+            {
+                Console.Write($"{message} ");
+                string input = Console.ReadLine()!;
+
+                if (string.IsNullOrEmpty(input) || !float.TryParse(input, out output) || output < 0f)
+                    Console.WriteLine(errorMessage);
+                else
+                    break;
+            }
+            return output;
+        }
+
         public static float? ReadNullableFloat(string message, string errorMessage = "Введите значение типа float (для присвоения NULL введите слово NULL заглавными буквами).")
         {
             float parseOutput = float.NaN;
@@ -179,6 +195,23 @@
                 input = Console.ReadLine()!;
 
                 if (string.IsNullOrEmpty(input) || (!input.Equals("NULL") && !float.TryParse(input, out parseOutput)))
+                    Console.WriteLine(errorMessage);
+                else
+                    break;
+            }
+            return input.Equals("NULL") ? null : parseOutput;
+        }
+
+        public static float? ReadNonNegativeNullableFloat(string message, string errorMessage = "Введите значение типа float, больше или равное 0 (для присвоения NULL введите слово NULL заглавными буквами).")
+        {
+            float parseOutput = float.NaN;
+            string input;
+            while (true)
+            {
+                Console.Write($"{message} ");
+                input = Console.ReadLine()!;
+
+                if (string.IsNullOrEmpty(input) || (!input.Equals("NULL") && (!float.TryParse(input, out parseOutput) || parseOutput < 0f)))
                     Console.WriteLine(errorMessage);
                 else
                     break;
